@@ -7,11 +7,10 @@
     - name: display info
       parted: device=/dev/sda unit=MB
       register: sda_info
-    - set_fact:
-            endpoint: >-
-                    {{ sda_info.partitions[-1].end }}
-            endnum: >-
-                    {{ sda_info.partitions[-1].num }}
+    - name: set vars
+      set_fact:
+            endpoint: "{{ sda_info.partitions[-1].end }}"
+            endnum:  "{{ sda_info.partitions[-1].num }}"
     - debug:
         var: "{{ endpoint | int + 1 }}"
 
