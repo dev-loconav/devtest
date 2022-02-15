@@ -1,0 +1,27 @@
+---
+- name: FS format
+  hosts: servers
+  become: yes
+  become_user: root
+  tasks:
+    - name: display info
+      parted: device=/dev/sda unit=MB
+      register: sda_info
+    - set_fact:
+            endpoint: >-
+                    {{ sda_info.partitions[-1].end }}
+            endnum: >-
+                    {{ sda_info.partitions[-1].num }}
+    - debug:
+        var: "{{ endpoint | int + 1 }}"
+
+    - name: create partition
+      parted:
+          device: /dev/sda
+          label: gpt
+          part_type: logical
+          number: "{{ (endnum | int | abs) + 1 }}"
+          part_start: "{{ (endpoint | int | abs) + 1 }}MB"
+          part_end: "{{ (endpoint | int | abs) + 1 + 1024 }}MB"
+          unit: MB
+          state: present
