@@ -1,0 +1,9 @@
+---
+default_fstype: "ext4"
+default_mkfs_opts: ""
+default_force: "no"
+default_mount_opts: "defaults"
+default_state: "mounted"
+default_owner: "root"
+default_group: "root"
+default_mode: "0644"
