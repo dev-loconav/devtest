@@ -24,7 +24,7 @@
   copy:
     src: /etc/rancher/rke2/rke2.yaml
     dest: ~/.kube/config
-  become: yes
+  become: true
   when: inventory_hostname == groups[rke2_servers_group_name].0
 
 - block:
