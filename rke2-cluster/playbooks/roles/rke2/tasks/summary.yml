@@ -21,10 +21,10 @@
   - rke2_download_kubeconf | bool
 
 - name: Prepare kubeconfig
-  copy:
+  fetch:
     src: /etc/rancher/rke2/rke2.yaml
     dest: ~/.kube/config
-  become: true
+  flat: yes
   when: inventory_hostname == groups[rke2_servers_group_name].0
 
 - block:
