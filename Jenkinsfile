@@ -5,10 +5,13 @@ pipeline {
         stage('Create K8S Cluster') {
             steps {
                 echo "Creating K8S cluster..."
-                sh """
-                  cd devtest/rke2-cluster
-                  ansible-playbook ./playbooks/create_rke.yaml -i ./inventory/host.ini
-                """
+                ansiColor('xterm') {
+                    ansiblePlaybook( 
+                        playbook: 'rke2-cluster/playbooks/create_rke.yaml',
+                        inventory: 'rke2-cluster/inventory/host.ini', 
+                        credentialsId: 'sample-ssh-key',
+                        colorized: true) 
+                }
             }
         
         }
