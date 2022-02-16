@@ -2,12 +2,12 @@ pipeline {
     agent any
 
     stages {
-        stage('Create K8S Cluster') {
+        stage('Delete K8S Cluster') {
             steps {
-                echo "Creating K8S cluster..."
+                echo "Deleting K8S cluster..."
                 ansiColor('xterm') {
                     ansiblePlaybook( 
-                        playbook: 'src/ansible/playbooks/create_rke.yaml',
+                        playbook: 'src/ansible/playbooks/delete_rke.yaml',
                         inventory: 'environments/prod/inventory/host.ini', 
                         colorized: true) 
                 }
