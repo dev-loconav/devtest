@@ -25,14 +25,14 @@
   shell: cd /tmp; tar -xvf helm-v3.8.0-linux-amd64.tar.gz
   when: inventory_hostname == groups[rke2_servers_group_name].0
 
-#- name: Configure helm
-# copy:
-#    src: /tmp/linux-amd64/helm
-#    dest: /usr/local/bin/helm
-#    owner: root
-#    group: root
-#    mode: 0777
-#  when: inventory_hostname == groups[rke2_servers_group_name].0
+- name: Configure helm
+ copy:
+    src: /tmp/linux-amd64/helm
+    dest: /usr/local/bin/helm
+    owner: root
+    group: root
+    mode: 0777
+  when: inventory_hostname == groups[rke2_servers_group_name].0
 
 - name: Add RKE2 to PATH
   copy:
