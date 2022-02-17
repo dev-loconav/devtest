@@ -7,7 +7,7 @@ pipeline {
                 echo "Creating K8S cluster..."
                 ansiColor('xterm') {
                     ansiblePlaybook( 
-                        playbook: 'src/ansible/playbooks/create_rke.yaml',
+                        playbook: 'src/ansible/create_rke.yaml',
                         inventory: 'environments/prod/inventory/host.ini', 
                         colorized: true) 
                 }
