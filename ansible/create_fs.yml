@@ -1,8 +1,0 @@
----
-
-- name: Create FS
-  hosts: all
-  become: yes
-
-  roles:
-    - partition

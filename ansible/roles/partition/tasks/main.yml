@@ -1,3 +1,0 @@
----
-- name: Create partition
-  include_tasks: partition.yaml
