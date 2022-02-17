@@ -1,0 +1,23 @@
+---
+
+- name: Stop RKE2 service
+  systemd:
+    name: "rke2-{{ item }}.service"
+    state: stopped
+  with_items:
+    - 'server'
+    - 'agent'
+
+- name: Delete RKE directory
+  file:
+    state: absent
+    path: /etc/rancher
+
+- name: Uninstall RKE2
+  shell: /usr/local/bin/rke2-uninstall.sh
+  register: shell_result
+  when: inventory_hostname == groups[rke2_servers_group_name].0
+
+- debug:
+    var: shell_result
+
