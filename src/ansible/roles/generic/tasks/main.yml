@@ -26,7 +26,7 @@
   when: inventory_hostname == groups[rke2_servers_group_name].0
 
 - name: Configure helm
- copy:
+  copy:
     src: /tmp/linux-amd64/helm
     dest: /usr/local/bin/helm
     owner: root
