@@ -1,0 +1,94 @@
+---
+
+- name: Get OS ARCH
+  shell: echo `uname | tr '[:upper:]' '[:lower:]'`_`uname -m | sed -e 's/x86_64/amd64/' -e 's/\(arm\)\(64\)\?.*/\1\2/' -e 's/aarch64$/arm64/'`
+  register: shell_result
+
+- name: Get node count
+  shell: bash -ic "kubectl get nodes --no-headers=true | wc -l"
+  register: node_count
+
+- set_fact:
+    krew_package: "krew-{{ shell_result.stdout }}"
+    krew_url: "https://github.com/kubernetes-sigs/krew/releases/latest/download/krew-{{ shell_result.stdout }}.tar.gz"
+    node_count: "{{ node_count.stdout }}"
+
+- name: Download krew
+  unarchive:
+    src: "{{ krew_url }}"
+    dest: /tmp
+    remote_src: True
+
+- name: Install Krew
+  shell: /tmp/krew-linux_amd64 install krew
+  register: krew_status
+
+- debug:
+    msg: "{{ krew_status }}"
+
+- name: Add krew to PATH
+  copy:
+    content: "export PATH=$PATH:$HOME/.krew/bin"
+    dest: "/etc/profile.d/add_krew_path.sh"
+
+- name: Update krew
+  shell: bash -ic "kubectl krew update"
+  register: krew_update_status
+  
+- debug:
+    msg: "{{ krew_update_status }}"
+
+- name: Install directpv 
+  shell: bash -ic "kubectl krew install directpv"
+  register: directpv_status
+
+- debug:
+    msg: "{{ directpv_status }}"
+
+- name: Enable dynamic discovery for directpv
+  shell: bash -ic "kubectl directpv install --enable-dynamic-discovery"
+  register: directpv_status
+
+- debug:
+    msg: "{{ directpv_status }}"
+
+- name: wait for pods to come up
+  shell: bash -ic "kubectl get pods -o json -n direct-csi-min-io" 
+  register: kubectl_get_pods
+  until: kubectl_get_pods.stdout|from_json|json_query('items[*].status.phase')|unique == ["Running"]
+
+- name: Print directpv info 
+  shell: bash -ic "kubectl directpv info"
+  register: directpv_status
+
+- debug:
+    msg: "{{ directpv_status.stdout_lines }}"
+
+- name: Get the count of directpv node
+  shell: bash -ic "kubectl directpv info | grep -v NODE | wc -l"
+  register: directpv_node_count
+
+
+- name: Make sure directpv available on all nodes
+  fail:
+    msg: "directpv is provisioned only on {{ directpv_node_count.stdout }} node(s) instead of {{ node_count }} node(s)."
+  when: "{{ directpv_node_count.stdout }} < {{ node_count }}"
+
+- name: Get the list of directpv drives
+  shell: bash -ic "kubectl directpv drives ls"
+  register: directpv_status
+
+- debug:
+    msg: "{{ directpv_status.stdout_lines }}"
+
+- name: Install minio
+  shell: bash -ic "kubectl krew install minio"
+  register: minio_status
+
+- debug:
+    msg: "{{ minio_status }}"
+
+
+
+
+
