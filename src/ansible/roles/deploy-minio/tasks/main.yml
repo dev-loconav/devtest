@@ -26,10 +26,13 @@
 - debug:
     msg: "{{ krew_status }}"
 
-- name: Add krew to PATH
-  copy:
-    content: "export PATH=$PATH:$HOME/.krew/bin"
-    dest: "/etc/profile.d/add_krew_path.sh"
+- name: Adding the path in the bashrc files for krew
+  lineinfile:
+    dest: /root/.bashrc
+    line: 'export PATH=$PATH:$HOME/.krew/bin'
+    insertafter: 'EOF'
+    regexp: 'export PATH=\$PATH:$HOME/.krew/bin'
+    state: present
 
 - name: Update krew
   shell: bash -ic "kubectl krew update"
@@ -56,6 +59,8 @@
   shell: bash -ic "kubectl get pods -o json -n direct-csi-min-io" 
   register: kubectl_get_pods
   until: kubectl_get_pods.stdout|from_json|json_query('items[*].status.phase')|unique == ["Running"]
+  retries: 40
+  delay: 15
 
 - name: Print directpv info 
   shell: bash -ic "kubectl directpv info"
