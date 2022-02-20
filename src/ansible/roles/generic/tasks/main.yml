@@ -36,5 +36,11 @@
     content: "export PATH=$PATH:/var/lib/rancher/rke2/bin"
     dest: "/etc/profile.d/add_path.sh"
   when: inventory_hostname == groups[rke2_servers_group_name].0
-
-
+  
+- name: Adding the path in the bashrc files
+  lineinfile:
+    dest: /root/.bashrc
+    line: 'export PATH=$PATH:/var/lib/rancher/rke2/bin'
+    insertafter: 'EOF'
+    regexp: 'export PATH=\$PATH:/var/lib/rancher/rke2/bin'
+    state: present
