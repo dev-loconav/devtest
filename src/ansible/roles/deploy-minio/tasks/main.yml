@@ -41,14 +41,14 @@
 - debug:
     msg: "{{ krew_update_status }}"
 
-- name: Install directpv 
+- name: Update directpv 
   shell: bash -ic "kubectl krew install directpv"
   register: directpv_status
 
 - debug:
     msg: "{{ directpv_status }}"
 
-- name: Enable dynamic discovery for directpv
+- name: Install directpv with Enable dynamic discovery
   shell: bash -ic "kubectl directpv install --enable-dynamic-discovery"
   register: directpv_status
 
@@ -86,12 +86,19 @@
 - debug:
     msg: "{{ directpv_status.stdout_lines }}"
 
-- name: Install minio
+- name: update minio
   shell: bash -ic "kubectl krew install minio"
   register: minio_status
 
 - debug:
     msg: "{{ minio_status }}"
+
+- name: Install and init pdate minio
+  shell: bash -ic "kubectl minio init"
+  register: minio_init_status
+
+- debug:
+    msg: "{{ minio_init_status }}"
 
 
 
