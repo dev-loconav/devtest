@@ -59,3 +59,61 @@ spec:
   volume:
     size: 10Gi
     storageClass: local-storage
+    
+    
+    
+ pv definitions
+       - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+          - vm21
+
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: loco-pv22
+spec:
+  capacity:
+    storage: 15Gi
+  accessModes:
+  - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: local-storage
+  local:
+    path: /dev/sdc1
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+          - vm22
+
+
+
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: loco-pv23
+spec:
+  capacity:
+    storage: 15Gi
+  accessModes:
+  - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: local-storage
+  local:
+    path: /dev/sdc2
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+          - vm23
+
