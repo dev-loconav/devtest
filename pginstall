@@ -121,6 +121,7 @@ spec:
 Once partitions are created, run below
    
 dd if=/dev/zero of=/dev/sdc1 bs=1M count=512 status=progress
+kubectl port-forward svc/postgres-operator-ui 9090:80 --address='0.0.0.0'
 
 pvc example:
 kind: PersistentVolumeClaim
