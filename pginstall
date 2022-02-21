@@ -1,0 +1,61 @@
+git clone https://github.com/zalando/postgres-operator.git
+cd postgres-operator
+
+helm install postgres-operator ./charts/postgres-operator
+
+check if its running
+kubectl get pod -l app.kubernetes.io/name=postgres-operator
+
+
+helm install postgres-operator-ui ./charts/postgres-operator-ui
+
+check if its running
+kubectl get pod -l app.kubernetes.io/name=postgres-operator-ui
+
+
+kubectl create -f manifests/pgdb.yaml
+
+# check the deployed cluster
+kubectl get postgresql
+
+# check created database pods
+kubectl get pods -l application=spilo -L spilo-role
+
+# check created service resources
+kubectl get svc -l application=spilo -L spilo-role
+
+
+
+pgdb.yaml
+apiVersion: "acid.zalan.do/v1"
+kind: postgresql
+metadata:
+  labels:
+    team: loco
+  name: loco-pgdb
+  namespace: default
+spec:
+  allowedSourceRanges: null
+  numberOfInstances: 3
+  users:
+    zalando:  # database owner
+    - superuser
+    - createdb
+    foo_user: []  # role for application foo
+  databases:
+    foo: zalando  # dbname: owner
+  preparedDatabases:
+    bar: {}
+  postgresql:
+    version: "14"
+  resources:
+    limits:
+      cpu: 500m
+      memory: 500Mi
+    requests:
+      cpu: 100m
+      memory: 100Mi
+  teamId: loco
+  volume:
+    size: 10Gi
+    storageClass: local-storage
