@@ -116,4 +116,21 @@ spec:
           operator: In
           values:
           - vm23
+          
+          
+Once partitions are created, run below
+   
+dd if=/dev/zero of=/dev/sdc1 bs=1M count=512 status=progress
 
+pvc example:
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: loco-pvc-21
+spec:
+  accessModes:
+  - ReadWriteOnce
+  storageClassName: local-storage
+  resources:
+    requests:
+      storage: 15Gi
