@@ -29,6 +29,7 @@
     owner: root
     group: root
     mode: 0777
+    remote_src: True
   when: inventory_hostname == groups[rke2_servers_group_name].0
 
 - name: Add RKE2 to PATH
