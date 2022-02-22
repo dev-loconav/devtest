@@ -19,7 +19,7 @@ pipeline {
                 echo "Creating partitions..."
                 ansiColor('xterm') {
                     ansiblePlaybook( 
-                        playbook: 'src/ansible/create_fs.yaml',
+                        playbook: 'src/ansible/create_fs.yml',
                         inventory: 'environments/prod/inventory/host.ini', 
                         colorized: true) 
                 }
