@@ -1,13 +1,24 @@
 ---
-- name: create partition
+- name: create partition1
   parted:
     device: "{{ fs_device }}"
     label: gpt
     part_type: logical
     number: "1"
-    part_start: "0GB"
-    part_end: "15GB"
-    unit: GB
+    part_start: "0MB
+    part_end: "16000MB
+    unit: MB
+    state: present
+    
+- name: create partition1
+  parted:
+    device: "{{ fs_device }}"
+    label: gpt
+    part_type: logical
+    number: "2"
+    part_start: "16001MB
+    part_end: "31000MB
+    unit: MB
     state: present
 
 - name: initialize partition
