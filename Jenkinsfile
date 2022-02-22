@@ -14,6 +14,18 @@ pipeline {
             }
         
         }
+        stage('Create partitions') {
+            steps {
+                echo "Creating partitions..."
+                ansiColor('xterm') {
+                    ansiblePlaybook( 
+                        playbook: 'src/ansible/create_fs.yaml',
+                        inventory: 'environments/prod/inventory/host.ini', 
+                        colorized: true) 
+                }
+            }
+        
+        }
     }
    post {
       // Clean after build
