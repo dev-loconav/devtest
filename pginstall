@@ -15,14 +15,7 @@ kubectl get pod -l app.kubernetes.io/name=postgres-operator-ui
 
 kubectl create -f manifests/pgdb.yaml
 
-# check the deployed cluster
-kubectl get postgresql
 
-# check created database pods
-kubectl get pods -l application=spilo -L spilo-role
-
-# check created service resources
-kubectl get svc -l application=spilo -L spilo-role
 
 
 
@@ -61,7 +54,22 @@ spec:
     storageClass: local-storage
     
     
-    
+   
+   
+   # check the deployed cluster
+kubectl get postgresql
+
+# check created database pods
+kubectl get pods -l application=spilo -L spilo-role
+
+# check created service resources
+kubectl get svc -l application=spilo -L spilo-role
+
+
+
+###################to be created before starting above deployment####################
+
+
 pv definitions
 
 
@@ -134,7 +142,7 @@ spec:
           operator: In
           values:
           - vm23
-          
+ #######################ignore below things##################      
           
 Once partitions are created, run below
    
