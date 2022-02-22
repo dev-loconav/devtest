@@ -104,7 +104,7 @@ rke2_agents_group_name: workers
 
 #FS creation values
 fstype : "ext4"
-fs_device : "/dev/sda"
+fs_device : "/dev/sdc"
 fs_mkfs_opts: ""
 fs_force: "no"
 mountpoint: /data_test1
