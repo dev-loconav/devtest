@@ -1,0 +1,33 @@
+apiVersion: "acid.zalan.do/v1"
+kind: postgresql
+metadata:
+  labels:
+    team: loco
+  name: loco-pgdb
+  namespace: default
+spec:
+  allowedSourceRanges: null
+  numberOfInstances: 3
+  users:
+    zalando:  # database owner
+    - superuser
+    - createdb
+    foo_user: []  # role for application foo
+  databases:
+    foo: zalando  # dbname: owner
+  preparedDatabases:
+    bar: {}
+  postgresql:
+    version: "14"
+  resources:
+    limits:
+      cpu: 500m
+      memory: 500Mi
+    requests:
+      cpu: 100m
+      memory: 100Mi
+  teamId: loco
+  volume:
+    size: 10Gi
+    storageClass: local-storage
+

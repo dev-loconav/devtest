@@ -1,0 +1,8 @@
+---
+
+- name: Deploy Postgres
+  hosts: masters
+  become: yes
+
+  roles:
+    - deploy-postgres

@@ -1,0 +1,46 @@
+---
+
+- name: Get PG Operator
+  copy:
+    src: postgres-operator
+    dest: /tmp
+
+- name: Deploy Postgres Operator
+  shell: helm install postgres-operator /tmp/postgres-operator/charts/postgres-operator
+
+- name: Create PV
+  shell: bash -ic "kubectl apply -f /tmp/postgres-operator/manifests/{{ item }}"
+  with_items:
+    - 'pv1.yaml'
+    - 'pv2.yaml'
+    - 'pv3.yaml'
+
+- name: Wait for pods to come up
+  shell: bash -ic "kubectl get pods -o json -l app.kubernetes.io/name=postgres-operator" 
+  register: kubectl_get_pods
+  until: kubectl_get_pods.stdout|from_json|json_query('items[*].status.phase')|unique == ["Running"]
+  retries: 40
+  delay: 15
+
+- name: Deploy Postgres Operator UI
+  shell: helm install postgres-operator-ui /tmp/postgres-operator/charts/postgres-operator-ui
+
+- name: Wait for postgres-operator-ui pods to come up
+  shell: bash -ic "kubectl get pods -o json -l app.kubernetes.io/name=postgres-operator-ui"
+  register: kubectl_get_pods
+  until: kubectl_get_pods.stdout|from_json|json_query('items[*].status.phase')|unique == ["Running"]
+  retries: 40
+  delay: 15
+
+- name: Deploy Postgres DB
+  shell: bash -ic "kubectl create -f /tmp/postgres-operator/manifests/pgdb.yaml"
+
+- name: Wait for postgres db pods to come up
+  shell: bash -ic "kubectl get pods -o json -l application=spilo -L spilo-role"
+  register: kubectl_get_pods
+  until: kubectl_get_pods.stdout|from_json|json_query('items[*].status.phase')|unique == ["Running"]
+  retries: 40
+  delay: 15
+
+
+
