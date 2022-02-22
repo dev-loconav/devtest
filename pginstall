@@ -62,8 +62,26 @@ spec:
     
     
     
- pv definitions
-       - matchExpressions:
+pv definitions
+
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: loco-pv21
+spec:
+  capacity:
+    storage: 15Gi
+  accessModes:
+  - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: local-storage
+  local:
+    path: /dev/sdc1
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
         - key: kubernetes.io/hostname
           operator: In
           values:
@@ -107,7 +125,7 @@ spec:
   persistentVolumeReclaimPolicy: Retain
   storageClassName: local-storage
   local:
-    path: /dev/sdc2
+    path: /dev/sdc1
   nodeAffinity:
     required:
       nodeSelectorTerms:
