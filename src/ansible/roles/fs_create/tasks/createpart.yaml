@@ -10,7 +10,7 @@
     unit: MB
     state: present
     
-- name: create partition1
+- name: create partition2
   parted:
     device: "{{ fs_device }}"
     label: gpt
