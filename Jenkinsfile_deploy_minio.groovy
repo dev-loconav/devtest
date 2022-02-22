@@ -5,6 +5,7 @@ pipeline {
         stage('Deploy Minio') {
             steps {
                 echo "Deploying Minio..."
+                sh "rm -rf /var/lib/jenkins/.ssh/known_hosts"
                 ansiColor('xterm') {
                     ansiblePlaybook( 
                         playbook: 'src/ansible/deploy_minio.yaml',
