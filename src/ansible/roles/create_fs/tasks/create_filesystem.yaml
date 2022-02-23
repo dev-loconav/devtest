@@ -16,7 +16,7 @@
 
 - name: create partition
   parted:
-    device: "{{ fs_device }}"
+    device: "{{ disk_name }}"
     label: gpt
     part_type: logical
     number: "{{ part_no }}"
