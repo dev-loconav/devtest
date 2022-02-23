@@ -1,0 +1,54 @@
+# for each disk
+  #disk_name
+  # for each partition
+    #part_size:
+    #part_no:
+
+
+- name: display info
+  parted:
+    device: "{{ disk_name }}"
+    unit: MB
+  register:  disk_info
+- name: set vars
+  set_fact:
+      endpoint: "{{ disk_info.partitions[-1].end }}"
+
+- name: create partition
+  parted:
+    device: "{{ fs_device }}"
+    label: gpt
+    part_type: logical
+    number: "{{ part_no }}"
+    part_start: "{{ (endpoint | int | abs) + 1 }}MB"
+    part_end: "{{ (endpoint | int | abs) + 1 + (part_size) }}MB"
+    unit: MB
+    state: present
+
+
+#for each filesystem
+  #device
+  #mountpoint
+- name: Create file systems
+  filesystem:
+    fstype: "{{ fstype }}"
+    dev: "{{ device }}"
+    opts: "{{ fs_mkfs_opts | default(default_mkfs_opts) }}"
+    force: "{{ fs_force | default(default_force | bool) }}"
+
+- name: Mount file systems
+  mount:
+    path: "{{ mountpoint }}"
+    src: "{{ device }}"
+    fstype: "{{ fstype | default(default_fstype) }}"
+    opts: "{{ fs_mount_opts | default(default_mount_opts) }}"
+    state: "{{ mount_state | default(default_state) }}"
+
+- name: Set owner on file systems
+  file:
+    path: "{{ mountpoint }}"
+    owner: "{{ owner | default(default_owner) }}"
+    group: "{{ group | default(default_group) }}"
+    mode: "{{ mode | default(default_mode) }}"
+
+
