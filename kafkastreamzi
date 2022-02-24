@@ -73,5 +73,14 @@ spec:
   entityOperator:
     topicOperator: {}
     userOperator: {}
+    
+    
+  ###this was added later to run as root. in both kafka and zookeeper
+  
+      template:
+      pod:
+        securityContext:
+          runAsUser: 0
+          fsGroup: 0
 
 
