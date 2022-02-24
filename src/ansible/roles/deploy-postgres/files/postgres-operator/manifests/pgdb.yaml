@@ -29,5 +29,5 @@ spec:
   teamId: loco
   volume:
     size: 10Gi
-    storageClass: local-storage
+#    storageClass: local-storage
 
