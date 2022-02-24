@@ -13,7 +13,7 @@ pipeline {
                         colorized: true) 
                 }
             }
-        
+          }
         }
         
    post {
