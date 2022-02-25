@@ -1,3 +1,0 @@
----
-- name: Create fs
-  include_tasks: createpart.yaml
