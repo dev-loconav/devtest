@@ -1,20 +1,18 @@
 ---
-disks:
-  disk1:
-    - diskname: "/dev/sdc"
-    - name: "/dev/sdc2"
-      part_no: 2
-      size: 5000
-    - name: "/dev/sdc3"
-      part_no: 3
-      size: 5000
-  disk2:
-    - name: "/dev/sdd1"
-      part_no: 1
-      size: 5000
-    - name: "/dev/sdd2"
-      part_no: 2
-      size: 5000
+partitions:
+  - disk: /dev/sdc
+    no: 2
+    size: 15000
+  - disk: /dev/sdc
+    no: 3
+    size: 15000
+  - disk: /dev/sdd
+    no: 1
+    size: 15000
+  - disk: /dev/sdd
+    no: 2
+    size: 15000
+
 
 filesystems:
   - mountpoint: "/data_fs1"
