@@ -1,6 +1,9 @@
 pipeline {
     agent any
+parameters {
+  string(name: 'hosts', defaultValue: 'all', description: 'Hosts on which FS to be created')
 
+ }
     stages {
         stage('Deploy Postgres') {
             steps {
