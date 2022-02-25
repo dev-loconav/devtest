@@ -13,7 +13,6 @@ partitions:
     no: 2
     size: 15000
 
-
 filesystems:
   - mountpoint: "/data_fs1"
     device: "/dev/sdc2"
