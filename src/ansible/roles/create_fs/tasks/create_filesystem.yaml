@@ -15,7 +15,7 @@
 
 - name: Create file systems
   filesystem:
-    fstype: "{{ fstype }}"
+    fstype: "{{ fstype | default(default_fstype)}}"
     dev: "{{ device }}"
     opts: "{{ fs_mkfs_opts | default(default_mkfs_opts) }}"
     force: "{{ fs_force | default(default_force | bool) }}"
