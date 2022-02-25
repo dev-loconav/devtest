@@ -1,8 +1,17 @@
 ---
+
 - name: set vars
   set_fact:
     device: "{{ item.device}}"
     mountpoint: "{{ item.mountpoint}}"
+
+- name: get UUID for device
+  shell: |
+    set -o pipefail
+    /sbin/blkid | grep "{{ device}}" | awk '{print $2}' |  cut -d"=" -f2 | cut -d"\"" -f2
+  args:
+    executable: /bin/bash
+  register: DUUID
 
 - name: Create file systems
   filesystem:
@@ -14,7 +23,7 @@
 - name: Mount file systems
   mount:
     path: "{{ mountpoint }}"
-    src: "{{ device }}"
+    src: "UUID={{ DUUID.stdout }}"
     fstype: "{{ fstype | default(default_fstype) }}"
     opts: "{{ fs_mount_opts | default(default_mount_opts) }}"
     state: "{{ mount_state | default(default_state) }}"
