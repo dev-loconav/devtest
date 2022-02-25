@@ -1,1 +1,21 @@
+---
+partitions:
+  - disk: /dev/sda
+    partno: 2
+    size: 15000
+  - disk: /dev/sda
+    partno: 3
+    size: 15000
+    #  - disk: /dev/sdb
+    #partno: 1
+    #size: 15000
+    #- disk: /dev/sdd
+    #partno: 2
+    #size: 15000
 
+
+filesystems:
+  - mountpoint: "/data_fs1"
+    device: "/dev/sda2"
+  - mountpoint: "/data_fs2"
+    device: "/dev/sda3"
