@@ -13,7 +13,7 @@ parameters {
                     ansiblePlaybook( 
                         playbook: 'src/ansible/create_fs.yml',
                         inventory: 'environments/prod/inventory/host.ini',
-                        limit:  '${params.hosts}',
+                        limit:  ${params.hosts},
                         colorized: true) 
                 }
             }
