@@ -1,34 +1,9 @@
-# for each disk
-  #disk_name
-  # for each partition
-    #part_size:
-    #part_no:
-
-
-- name: display info
-  parted:
-    device: "{{ disk_name }}"
-    unit: MB
-  register:  disk_info
+---
 - name: set vars
   set_fact:
-      endpoint: "{{ disk_info.partitions[-1].end }}"
+    device: "{{ item.device}}"
+    mountpoint: "{{ item.mountpoint}}"
 
-- name: create partition
-  parted:
-    device: "{{ disk_name }}"
-    label: gpt
-    part_type: logical
-    number: "{{ part_no }}"
-    part_start: "{{ (endpoint | int | abs) + 1 }}MB"
-    part_end: "{{ (endpoint | int | abs) + 1 + (part_size) }}MB"
-    unit: MB
-    state: present
-
-
-#for each filesystem
-  #device
-  #mountpoint
 - name: Create file systems
   filesystem:
     fstype: "{{ fstype }}"
@@ -50,5 +25,3 @@
     owner: "{{ owner | default(default_owner) }}"
     group: "{{ group | default(default_group) }}"
     mode: "{{ mode | default(default_mode) }}"
-
-
