@@ -8,12 +8,14 @@ partitions:
     partno: 3
     size: 15000
     purpose: minio
-    #  - disk: /dev/sdb
-    #partno: 1
-    #size: 15000
-    #- disk: /dev/sdd
-    #partno: 2
-    #size: 15000
+  - disk: /dev/sdb
+    partno: 1
+    size: 15000
+    purpose: kafka
+  - disk: /dev/sdd
+    partno: 2
+    size: 15000
+    purpose: zookeeper
 
 
 filesystems:
