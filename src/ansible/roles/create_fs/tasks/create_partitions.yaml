@@ -1,0 +1,22 @@
+---
+- name: display info
+  parted:
+    device: "{{ item.disk}}"
+    unit: MB
+  register:  disk_info
+- name: set vars
+  set_fact:
+    endpoint: "{{ disk_info.partitions[-1].end }}"
+    part_size: "{{ item.size }}"
+    part_no: "{{ item.partno }}"
+    disk: "{{ item.disk}}"
+- name: create partition
+  parted:
+    device: "{{ disk }}"
+    label: gpt
+    part_type: logical
+    number: "{{ part_no }}"
+    part_start: "{{ (endpoint | int | abs) + 1 }}MB"
+    part_end: "{{ (endpoint | int | abs) + 1 + (part_size | int | abs) }}MB"
+    unit: MB
+    state: present
