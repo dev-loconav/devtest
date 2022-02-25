@@ -3,9 +3,11 @@ partitions:
   - disk: /dev/sda
     partno: 2
     size: 15000
+    purpose: minio
   - disk: /dev/sda
     partno: 3
     size: 15000
+    purpose: minio
     #  - disk: /dev/sdb
     #partno: 1
     #size: 15000
