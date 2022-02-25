@@ -1,0 +1,43 @@
+---
+
+- name: Create pv files 
+  template:
+    src: pv.yaml
+    dest: "/tmp/pv_{{ item }}.yaml"
+  with_items:
+    - 'pv1'
+    - 'pv2'
+    - 'pv3'
+    - 'pv4'
+    - 'pv5'
+    - 'pv6'
+
+
+- name: Create PV
+  shell: bash -ic "kubectl apply -f /tmp/pv_{{ item }}.yaml"
+  with_items:
+    - 'pv1'
+    - 'pv2'
+    - 'pv3'
+    - 'pv4'
+    - 'pv5'
+    - 'pv6'
+
+- name: Create namespace
+  shell: bash -ic "kubectl create ns kafka"
+  ignore_errors: True
+
+- name: Get kafka deployment file
+  copy:
+    src: kafka
+    dest: /tmp
+
+- name: Deploy kafka operator
+  shell: bash -ic "kubectl create -f /tmp/kafka/kafka.yaml -n kafka"
+
+- name: Deploy kafka
+  shell: bash -ic "kubectl create -f /tmp/kafka/kafka-cluster.yaml -n kafka"
+
+- name: Wait for pods to come up
+  shell: bash -ic "kubectl wait kafka/my-cluster --for=condition=Ready --timeout=300s -n kafka"
+
