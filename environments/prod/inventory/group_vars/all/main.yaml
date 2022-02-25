@@ -100,7 +100,6 @@ rke2_agents_group_name: workers
 # rke2_agent_options:
 #   - "option: value"
 
----
 default_fstype: "ext4"
 default_mkfs_opts: ""
 default_force: "no"
