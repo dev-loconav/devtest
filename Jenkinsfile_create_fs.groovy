@@ -10,7 +10,7 @@ pipeline {
                     ansiblePlaybook( 
                         playbook: 'src/ansible/create_fs.yml',
                         inventory: 'environments/prod/inventory/host.ini',
-                        limit:  '${params.host}'
+                        limit:  '${params.host}',
                         colorized: true) 
                 }
             }
