@@ -1,10 +1,11 @@
 ---
 miniodisks:
-  - disk: /dev/sdc
+  - part: 1
+    disk: /dev/sda
     size: 15000
-  - disk: /dev/sdc
+  - part: 2
+    disk: /dev/sda
     size: 15000
-
 vg:
  vgname: vg1
  disk: /dev/sda
