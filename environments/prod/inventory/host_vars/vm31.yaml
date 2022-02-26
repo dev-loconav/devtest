@@ -3,9 +3,11 @@ miniodisks:
   - part: 1
     disk: /dev/sda
     size: 15000
+    label: gpt
   - part: 2
     disk: /dev/sda
     size: 15000
+    label: gpt
 vg:
  vgname: vg1
  disk: /dev/sda
