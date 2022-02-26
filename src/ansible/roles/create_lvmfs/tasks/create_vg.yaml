@@ -1,0 +1,39 @@
+---
+- name: display info
+  parted:
+    device: "{{ item.disk}}"
+    unit: MB
+  register:  disk_info
+
+- name: set vars
+  set_fact:
+    endpoint: "{{ disk_info.partitions[-1].end }}"
+    endnum:  "{{ disk_info.partitions[-1].num }}"
+    part_size: "{{ item.size }}"
+    disk: "{{ item.disk}}"
+    mode: "{{ item.mode }}"
+    vgname: "{{ item.vgname }}"
+    devices: "{{ item.no_of_disks }}"
+    pvlist: ""
+
+- block:
+    - name: create partition
+      parted:
+        device: "{{ disk }}"
+        part_type: logical
+        number: "{{ (endnum | int | abs) + 1 }}"
+        part_start: "{{ (endpoint | int | abs) + 1 }}MB"
+        part_end: "{{ (endpoint | int | abs) + 1 + (part_size | int | abs) }}MB"
+        flags: [ lvm ]
+        unit: MB
+        state: present
+    - name: build pv string
+      set_fact:
+        part_no: "{{ (endnum | int | abs) + 1 }}"
+        pvlist: "{{ pvlist + ' ' + device + part_no }}"
+  with_sequence: count="{{ devices }}"
+
+- name: create vg
+  community.general.lvg:
+    vg: "{{ vgname }"
+    pvs: "{{ pvlist}}"
