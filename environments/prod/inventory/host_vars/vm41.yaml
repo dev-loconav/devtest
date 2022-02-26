@@ -1,0 +1,30 @@
+---
+miniodisks:
+  - disk: /dev/sda
+    size: 15000
+  - disk: /dev/sda
+    size: 15000
+
+vg:
+ vgname: vg1
+ disk: /dev/sda
+ disk_size: 30
+ no_of_disks: 6
+ mode: new   #new|extend
+
+fs:
+  - mountpoint: "/kafkadata"
+    size: 15
+    mode: new  #new|extend
+  - mountpoint: "/zkdata"
+    size: 15
+    mode: new  #new|extend
+  - mountpoint: "/pgdata"
+    size: 15
+    mode: new  #new|extend
+  - mountpoint: "/redisdata"
+    size: 15
+    mode: new  #new|extend
+  - mountpoint: "/data"
+    size: 15
+    mode: new  #new|extend
