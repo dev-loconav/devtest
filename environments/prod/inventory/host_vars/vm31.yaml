@@ -1,5 +1,5 @@
 ---
-miniopartitions:
+miniodisks:
   - disk: /dev/sda
     size: 15000
   - disk: /dev/sda
