@@ -1,0 +1,4 @@
+---
+
+- include_tasks: create_miniodisks.yaml
+  with_items : "{{ hostvars[inventory_hostname].miniopartitions }}"
