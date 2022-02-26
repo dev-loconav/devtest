@@ -9,11 +9,12 @@ miniodisks:
     size: 15000
     label: gpt
 vg:
- vgname: vg1
- disk: /dev/sda
- size: 5000
- no_of_disks: 6
- mode: new   #new|extend
+ - no: 1
+   vgname: vg1
+   disk: /dev/sda
+   size: 5000
+   no_of_disks: 6
+   mode: new   #new|extend
 
 filesystems:
   - mountpoint: "/kafkadata"
