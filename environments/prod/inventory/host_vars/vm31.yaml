@@ -1,8 +1,8 @@
 ---
 miniodisks:
-  - disk: /dev/sda
+  - disk: /dev/sdc
     size: 15000
-  - disk: /dev/sda
+  - disk: /dev/sdc
     size: 15000
 
 vg:
