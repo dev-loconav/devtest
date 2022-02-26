@@ -1,0 +1,6 @@
+---
+
+- include_tasks: create_vg.yaml
+  with_items : "{{ hostvars[inventory_hostname].vg }}"
+- include_tasks: create_lvm_fs.yaml
+  with_items : "{{ hostvars[inventory_hostname].fs }}"
