@@ -24,3 +24,6 @@
     flags: [ lvm ]
     unit: MB
     state: present
+
+- name: record uuid
+  set_fact:
