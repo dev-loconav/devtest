@@ -1,25 +1,30 @@
 ---
-partitions:
+miniopartitions:
   - disk: /dev/sda
-    partno: 2
     size: 15000
-    purpose: minio
   - disk: /dev/sda
-    partno: 3
     size: 15000
-    purpose: minio
-  - disk: /dev/sdb
-    partno: 1
-    size: 15000
-    purpose: kafka
-  - disk: /dev/sdd
-    partno: 2
-    size: 15000
-    purpose: zookeeper
 
+vg:
+ vgname: vg1
+ disk: /dev/sda
+ disk_size: 30
+ no_of_disks: 6
+ mode: new   #new|extend
 
 filesystems:
-  - mountpoint: "/data_fs1"
-    device: "/dev/sda2"
-  - mountpoint: "/data_fs2"
-    device: "/dev/sda3"
+  - mountpoint: "/kafkadata"
+    size: 15
+    mode: new  #new|extend
+  - mountpoint: "/zkdata"
+    size: 15
+    mode: new  #new|extend
+  - mountpoint: "/pgdata"
+    size: 15
+    mode: new  #new|extend
+  - mountpoint: "/redisdata"
+    size: 15
+    mode: new  #new|extend
+  - mountpoint: "/data"
+    size: 15
+    mode: new  #new|extend
