@@ -11,11 +11,13 @@
     endnum:  "{{ disk_info.partitions[-1].num }}"
     part_size: "{{ item.size }}"
     disk: "{{ item.disk}}"
+    label: "{{ item.label }}"
 
 - name: create partition
   parted:
     device: "{{ disk }}"
     part_type: logical
+    label: "{{ label }}"
     number: "{{ (endnum | int | abs) + 1 }}"
     part_start: "{{ (endpoint | int | abs) + 1 }}MB"
     part_end: "{{ (endpoint | int | abs) + 1 + (part_size | int | abs) }}MB"
