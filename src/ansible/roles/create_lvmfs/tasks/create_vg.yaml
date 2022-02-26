@@ -29,8 +29,8 @@
         state: present
     - name: build pv string
       set_fact:
-        part_no: "{{ (endnum | int | abs) + 1 }}"
-        pvlist: "{{ pvlist + ' ' + device + part_no }}"
+        endnum: "{{ (endnum | int | abs) + 1 }}"
+        pvlist: "{{ device + endnum + ' ' + pvlist}}"
   with_sequence: count="{{ devices }}"
 
 - name: create vg
