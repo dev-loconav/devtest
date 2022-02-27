@@ -10,7 +10,7 @@ pipeline {
                     ansiblePlaybook( 
                         playbook: 'src/ansible/remove_node.yaml',
                         inventory: 'environments/prod/inventory/host.ini',
-                        extra: '-e remove_node_list="${remove_node_list}"',
+                        extras: '-e remove_node_list="${remove_node_list}"',
                         colorized: true) 
                 }
             }
