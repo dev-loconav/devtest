@@ -1,6 +1,7 @@
 ---
 
 - name: set vars
+  tags: fs
   set_fact:
     size: "{{ item.size }}"
     fsname: "{{ item.mountpoint}}"
@@ -8,7 +9,9 @@
     lvname: "{{ item.lvname }}"
     vgname: "{{ item.vgname }}"
 
-- block:
+- name: create new lv and mount fs
+  tags: fs
+  block:
    - name: task for creating logical volume
      lvol:
        vg: "{{ vgname }}"
@@ -36,6 +39,7 @@
   when:  mode  == "new"
 
 - name: extend FS
+  tags: fs
   lvol:
       vg: "{{ vgname }}"
       lv: "{{ lvname }}"
