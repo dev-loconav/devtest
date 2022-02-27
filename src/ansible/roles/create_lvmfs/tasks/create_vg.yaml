@@ -1,12 +1,13 @@
 ---
-
 - name: display info
+  tags: vg
   parted:
     device: "{{ item.disk}}"
     unit: MB
   register:  disk_info
 
 - name: set vars
+  tags: vg
   set_fact:
     endpoint: "{{ disk_info.partitions[-1].end }}"
     endnum:  "{{ disk_info.partitions[-1].num }}"
@@ -18,6 +19,7 @@
     pvlist: ""
 
 - name: create partition
+  tags: vg
   parted:
     device: "{{ disk }}"
     part_type: logical
@@ -30,12 +32,14 @@
     state: present
 
 - name: create vg
+  tags: vg
   lvg:
     vg: "{{ vgname }}"
     pvs: "{{ disk + ((endnum | int | abs) + 1) | string}}"
   when:  mode  == "new"
 
 - name: extend vg
+  tags: vg
   shell: |
     vgextend "{{ vgname }}" "{{ disk + ((endnum | int | abs) + 1) | string}}"
   when:  mode  == "extend"
