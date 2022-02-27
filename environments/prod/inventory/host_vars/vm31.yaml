@@ -1,12 +1,12 @@
 ---
 miniodisks:
   - part: 1
-    disk: /dev/sdd
-    size: 15000
+    disk: /dev/sdb
+    size: 1000
     label: gpt
   - part: 2
-    disk: /dev/sdd
-    size: 15000
+    disk: /dev/sdb
+    size: 1000
     label: gpt
 vg:
         # - no: 1
@@ -24,7 +24,7 @@ vg:
  - no: 3
    vgname: vg1
    disk: /dev/sdb
-   size: 5000
+   size: 1000
    mode: extend
    label: gpt
 
