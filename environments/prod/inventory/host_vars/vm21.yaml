@@ -8,6 +8,8 @@ miniodisks:
     disk: /dev/sdc
     size: 1000
     label: gpt
+
+####disks must have atleast 1 partition
 vg:
         # - no: 1
         #   vgname: vg1
