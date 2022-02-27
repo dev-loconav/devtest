@@ -1,0 +1,45 @@
+---
+
+- name: set vars
+  set_fact:
+    size: "{{ item.size }}"
+    fsname: "{{ item.mountpoint}}"
+    mode: "{{ item.mode }}"
+    lvname: "{{ item.lvname }}"
+    vgname: "{{ item.vgname }}"
+
+- block:
+   - name: task for creating logical volume
+     lvol:
+       vg: "{{ vgname }}"
+       lv: "{{ lvname }}"
+       size: "{{ size }}g"
+       force: yes
+
+   - name: Create directory data1 if does not exist
+     file:
+       path: "{{ fsname }}"
+       state: directory
+       mode: '0755'
+
+   - name: format the ext4 filesystem
+     filesystem:
+       fstype: ext4
+       dev: "/dev/{{ vgname }}/{{ lvname }}"
+
+   - name: mount the lv on fs
+     mount:
+       path: "{{ fsname }}"
+       src: "/dev/{{ vgname }}/{{ lvname }}"
+       fstype: ext4
+       state: mounted
+  when:  mode  == "new"
+
+- name: extend FS
+  lvol:
+      vg: "{{ vgname }}"
+      lv: "{{ lvname }}"
+      size: "{{ size }}g"
+      resizefs: true
+      force: yes
+  when:  mode  == "extend"
