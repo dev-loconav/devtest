@@ -33,17 +33,17 @@ fs:
     lvname: "kafkadatalv"
     vgname: vg1
     size: 5
-    mode: extend  #new|extend
+    mode: new  #new|extend
   - mountpoint: "/zkdata"
     lvname: "zkdatalv"
     vgname: vg1
     size: 5
-    mode: extend  #new|extend
+    mode: new  #new|extend
   - mountpoint: "/pgdata"
     lvname: "pgdatalv"
     vgname: vg1
     size: 5
-    mode: extend  #new|extend
+    mode: new  #new|extend
   - mountpoint: "/redisdata"
     lvname: "redisdatalv"
     vgname: vg1
