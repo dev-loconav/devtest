@@ -1,6 +1,10 @@
 ---
 
-- include_tasks: create_vg.yaml
+- name: vg create or extend
+  include_tasks: create_vg.yaml
+  tags: vg
   with_items : "{{ hostvars[inventory_hostname].vg }}"
-- include_tasks: create_lvm_fs.yaml
+- name: fs create or extend
+  include_tasks: create_lvm_fs.yaml
+  tags: fs
   with_items : "{{ hostvars[inventory_hostname].fs }}"
