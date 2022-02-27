@@ -15,16 +15,16 @@ vg:
         #   size: 5000
         #   mode: new   #new|extend
         #   label: gpt
-        # - no: 2
-        #   vgname: vg1
-        #   disk: /dev/sda
-        #   size: 5000
-        #   mode: extend
-        #   label: gpt
+ - no: 2
+   vgname: vg1
+   disk: /dev/sdc
+   size: 5000
+   mode: new
+   label: gpt
  - no: 3
    vgname: vg1
-   disk: /dev/sdb
-   size: 1000
+   disk: /dev/sdc
+   size: 25000
    mode: extend
    label: gpt
 
@@ -32,20 +32,20 @@ fs:
   - mountpoint: "/kafkadata"
     lvname: "kafkadatalv"
     vgname: vg1
-    size: 9
+    size: 5
     mode: extend  #new|extend
   - mountpoint: "/zkdata"
     lvname: "zkdatalv"
     vgname: vg1
-    size: 12
+    size: 5
     mode: extend  #new|extend
   - mountpoint: "/pgdata"
     lvname: "pgdatalv"
     vgname: vg1
-    size: 9
+    size: 5
     mode: extend  #new|extend
   - mountpoint: "/redisdata"
     lvname: "redisdatalv"
     vgname: vg1
-    size: 2
+    size: 10
     mode: new  #new|extend
