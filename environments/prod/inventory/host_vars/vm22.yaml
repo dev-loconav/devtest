@@ -9,12 +9,6 @@ miniodisks:
     size: 1000
     label: gpt
 vg:
-        # - no: 1
-        #   vgname: vg1
-        #   disk: /dev/sda
-        #   size: 5000
-        #   mode: new   #new|extend
-        #   label: gpt
  - no: 2
    vgname: vg1
    disk: /dev/sdc
