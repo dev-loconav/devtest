@@ -26,4 +26,5 @@
     state: present
 
 - name: record uuid
-  set_fact:
+  shell: |
+    /sbin/blkid | grep "{{ disk + ((endnum | int | abs) + 1) | string }}" | awk '{print $3}' | cut -d"\"" -f2 >> /etc/miniodiskuid
