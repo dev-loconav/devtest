@@ -1,6 +1,0 @@
----
-
-- include_tasks: create_partitions.yaml
-  with_items : "{{ hostvars[inventory_hostname].partitions }}"
-- include_tasks: create_filesystem.yaml
-  with_items : "{{ hostvars[inventory_hostname].filesystems }}"
