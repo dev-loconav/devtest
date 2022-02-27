@@ -1,0 +1,20 @@
+---
+
+- name: Drain node
+  shell: bash -ic "kubectl drain {{ item }} --ignore-daemonsets"
+  with_items: "{{ remove_node_list }}"
+  register: node_status
+
+- debug:
+    msg: "{{ item.stdout_lines }}"
+  loop: "{{ node_status.results }}"
+
+- name: Delete node
+  shell: bash -ic "kubectl delete node {{ item }}"
+  with_items: "{{ remove_node_list }}"
+  register: node_status
+
+- debug:
+    msg: "{{ item.stdout_lines }}"
+  loop: "{{ node_status.results }}"
+
