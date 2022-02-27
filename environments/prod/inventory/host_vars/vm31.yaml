@@ -1,42 +1,46 @@
 ---
 miniodisks:
   - part: 1
-    disk: /dev/sda
+    disk: /dev/sdd
     size: 15000
     label: gpt
   - part: 2
-    disk: /dev/sda
+    disk: /dev/sdd
     size: 15000
     label: gpt
 vg:
- - no: 1
-   vgname: vg1
-   disk: /dev/sda
-   size: 5000
-   mode: new   #new|extend
- - no: 2
-   vgname: vg1
-   disk: /dev/sda
-   size: 5000
-   mode: extend
+        # - no: 1
+        #   vgname: vg1
+        #   disk: /dev/sda
+        #   size: 5000
+        #   mode: new   #new|extend
+        #   label: gpt
+        # - no: 2
+        #   vgname: vg1
+        #   disk: /dev/sda
+        #   size: 5000
+        #   mode: extend
+        #   label: gpt
  - no: 3
    vgname: vg1
-   disk: /dev/sda
+   disk: /dev/sdb
+   size: 5000
    mode: extend
+   label: gpt
 
-filesystems:
+fs:
   - mountpoint: "/kafkadata"
-    size: 15
-    mode: new  #new|extend
+    lvname: "kafkadatalv"
+    vgname: vg1
+    size: 7
+    mode: extend  #new|extend
   - mountpoint: "/zkdata"
-    size: 15
-    mode: new  #new|extend
+    lvname: "zkdatalv"
+    vgname: vg1
+    size: 10
+    mode: extend  #new|extend
   - mountpoint: "/pgdata"
-    size: 15
-    mode: new  #new|extend
-  - mountpoint: "/redisdata"
-    size: 15
-    mode: new  #new|extend
-  - mountpoint: "/data"
-    size: 15
+    lvname: "pgdatalv"
+    vgname: vg1
+    size: 6
     mode: new  #new|extend
