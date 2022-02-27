@@ -1,8 +1,7 @@
----
-
 - name: Deploy minio 
   hosts: masters
   become: yes
 
   roles:
     - deploy-minio
+   
