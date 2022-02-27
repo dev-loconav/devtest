@@ -13,8 +13,16 @@ vg:
    vgname: vg1
    disk: /dev/sda
    size: 5000
-   no_of_disks: 6
    mode: new   #new|extend
+ - no: 2
+   vgname: vg1
+   disk: /dev/sda
+   size: 5000
+   mode: extend
+ - no: 3
+   vgname: vg1
+   disk: /dev/sda
+   mode: extend
 
 filesystems:
   - mountpoint: "/kafkadata"
