@@ -1,4 +1,5 @@
 ---
+
 - name: display info
   parted:
     device: "{{ item.disk}}"
@@ -13,27 +14,28 @@
     disk: "{{ item.disk}}"
     mode: "{{ item.mode }}"
     vgname: "{{ item.vgname }}"
-    devices: "{{ item.no_of_disks }}"
+    label: "{{ item.label }}"
     pvlist: ""
 
-- block:
-    - name: create partition
-      parted:
-        device: "{{ disk }}"
-        part_type: logical
-        number: "{{ (endnum | int | abs) + 1 }}"
-        part_start: "{{ (endpoint | int | abs) + 1 }}MB"
-        part_end: "{{ (endpoint | int | abs) + 1 + (part_size | int | abs) }}MB"
-        flags: [ lvm ]
-        unit: MB
-        state: present
-    - name: build pv string
-      set_fact:
-        endnum: "{{ (endnum | int | abs) + 1 }}"
-        pvlist: "{{ device + endnum + ' ' + pvlist}}"
-  with_sequence: count="{{ devices }}"
+- name: create partition
+  parted:
+    device: "{{ disk }}"
+    part_type: logical
+    label: "{{ label }}"
+    number: "{{ (endnum | int | abs) + 1 }}"
+    part_start: "{{ (endpoint | int | abs) + 1 }}MB"
+    part_end: "{{ (endpoint | int | abs) + 1 + (part_size | int | abs) }}MB"
+    flags: [ lvm ]
+    unit: MB
+    state: present
 
 - name: create vg
-  community.general.lvg:
-    vg: "{{ vgname }"
-    pvs: "{{ pvlist}}"
+  lvg:
+    vg: "{{ vgname }}"
+    pvs: "{{ disk + ((endnum | int | abs) + 1) | string}}"
+  when:  mode  == "new"
+
+- name: extend vg
+  shell: |
+    vgextend "{{ vgname }}" "{{ disk + ((endnum | int | abs) + 1) | string}}"
+  when:  mode  == "extend"
