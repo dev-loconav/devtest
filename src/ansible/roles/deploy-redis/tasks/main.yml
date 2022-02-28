@@ -9,11 +9,14 @@
   shell: bash -ic "kubectl apply -f /tmp/redis-data/pv.yaml"
 
 - name: Create namespace
-  shell: bash -ic "kubectl create ns redis"
+  shell: bash -ic "kubectl create ns {{ item }}"
   ignore_errors: True
+  with_items:
+    - 'redis'
+    - 'redis-operator'
 
 - name: Deploy redis operator
-  shell: bash -ic "helm upgrade redis-operator /tmp/redis-data/charts/redis-operator-0.10.1.tgz --install -n redis"
+  shell: bash -ic "helm upgrade redis-operator /tmp/redis-data/charts/redis-operator-0.10.1.tgz --install -n redis-operator"
 
 - name: Deploy redis
   shell: bash -ic "helm upgrade redis /tmp/redis-data/charts/redis-0.9.0.tgz --install -n redis"
