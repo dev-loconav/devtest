@@ -1,0 +1,8 @@
+---
+
+- name: Deploy Redis
+  hosts: masters
+  become: yes
+
+  roles:
+    - deploy-redis

@@ -1,0 +1,38 @@
+---
+
+- name: Get redis deployment files
+  copy:
+    src: redis-data
+    dest: /tmp
+
+- name: Create PV
+  shell: bash -ic "kubectl apply -f /tmp/redis-data/pv.yaml"
+
+- name: Create namespace
+  shell: bash -ic "kubectl create ns redis"
+  ignore_errors: True
+
+- name: Deploy redis operator
+  shell: bash -ic "helm upgrade redis-operator /tmp/redis-data/charts/redis-operator-0.10.1.tgz --install -n redis"
+
+- name: Deploy redis
+  shell: bash -ic "helm upgrade redis /tmp/redis-data/charts/redis-0.9.0.tgz --install -n redis"
+
+- name: Wait for pods to come up
+  shell: bash -ic "kubectl get pods -o json -n redis" 
+  register: kubectl_get_pods
+  until: kubectl_get_pods.stdout|from_json|json_query('items[*].status.phase')|unique == ["Running"]
+  retries: 40
+  delay: 15
+
+- name: Install redis-cli
+  apt:
+    name: redis-tools
+    state: present
+
+- name: Validation
+  shell: bash -ic "redis-cli -u redis://$(kubectl get endpoints -n ot-operators | grep redis-headless | awk -F ' ' '{print $2}') -c ping"
+  register: validation_status
+
+- debug:
+    msg: "{{ validation_status.stdout }}"
