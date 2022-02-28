@@ -34,7 +34,7 @@
     state: present
 
 - name: Validation
-  shell: bash -ic "redis-cli -u redis://$(kubectl get endpoints -n ot-operators | grep redis-headless | awk -F ' ' '{print $2}') -c ping"
+  shell: bash -ic "redis-cli -u redis://$(/var/lib/rancher/rke2/bin/kubectl get endpoints -n ot-operators | grep redis-headless | awk -F ' ' '{print $2}') -c ping"
   register: validation_status
 
 - debug:
