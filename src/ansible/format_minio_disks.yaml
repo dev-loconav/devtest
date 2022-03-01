@@ -1,0 +1,16 @@
+---
+
+- name: Deploy minio 
+  hosts: all
+  become: yes
+
+  roles:
+    - deploy-minio
+  tasks:
+    - name: copy script 
+      copy:
+        src: files/format_minio_disks.sh
+        dest: /tmp/format_minio_disks.sh
+        mode: 0744
+    - name: run script to format disks
+      shell: /tmp/format_minio_disks.sh
