@@ -14,6 +14,11 @@
   with_items: "{{ remove_node_list }}"
   register: node_status
 
+- name: Stop RKE2 service
+  systemd:
+    name: "rke2-agent.service"
+    state: stopped
+
 - debug:
     msg: "{{ item.stdout_lines }}"
   loop: "{{ node_status.results }}"
