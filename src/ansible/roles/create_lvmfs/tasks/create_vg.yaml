@@ -14,7 +14,7 @@
  
 - name: display disk init status
   debug: 
-    var: diskinit
+    msg: diskinit
 
 - name: create initial partition
   tags: vg
