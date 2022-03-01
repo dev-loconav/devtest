@@ -1,12 +1,14 @@
-#!/bin/bash -xv
+#!/bin/bash
 
-disk=${1}
-
-part_label=`parted ${disk} p | grep "Partition Table: unknown" | wc -l`
-if [ $part_label == 0 ]
-then
-        part_init="yes"
-else
-        part_init="no"
-fi
-echo $part_init
+for duids in `cat /etc/miniodiskuid`
+do
+        dhost=`hostname`
+        did=`blkid | grep $duids | cut -d":" -f1`
+        dcount=`kubectl directpv drives ls | grep -w $did | grep -w $dhost | grep "Available" | wc -l`
+        echo $d
+        echo $dcount
+        if [ $dcount == 1 ]
+        then
+                kubectl directpv drives format --drives $did --nodes $dhost --force
+        fi
+done
