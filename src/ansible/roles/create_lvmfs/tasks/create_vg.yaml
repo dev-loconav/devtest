@@ -15,7 +15,7 @@
 - name: display disk init status
   tags: vg
   debug: 
-    var: diskinit
+    var: diskinit.stdout
 
 - name: create initial partition
   tags: vg
@@ -29,7 +29,7 @@
     flags: [ lvm ]
     unit: MB
     state: present
-  when:  diskinit  == "no"
+  when:  diskinit.stdout  == "no"
 
 - name: display info
   tags: vg
@@ -77,10 +77,10 @@
   lvg:
     vg: "{{ vgname }}"
     pvs: "{{ disk + ((endnum | int | abs) + 1) | string}}"
-  when:  vgexists  == "no"
+  when:  vgexists.stdout  == "no"
 
 - name: extend vg
   tags: vg
   shell: |
     vgextend "{{ vgname }}" "{{ disk + ((endnum | int | abs) + 1) | string}}"
-  when:  vgexists  == "yes"
+  when:  vgexists.stdout  == "yes"
