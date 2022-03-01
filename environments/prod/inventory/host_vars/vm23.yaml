@@ -16,11 +16,11 @@ vg:
     disk: /dev/sdc
     size: 5000
     label: gpt
- - no: 2
-   vgname: vg1
-   disk: /dev/sdc
-   size: 5000
-   label: gpt
+  - no: 2
+    vgname: vg1
+    disk: /dev/sdc
+    size: 5000
+    label: gpt
 
 
 fs:
