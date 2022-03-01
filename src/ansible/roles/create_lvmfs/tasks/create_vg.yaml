@@ -11,6 +11,10 @@
   tags: vg
   shell: /tmp/check_disk_init.sh "{{ item.disk }}"
   register: diskinit
+ 
+- name: display disk init status
+  debug: 
+    var: diskinit
 
 - name: create initial partition
   tags: vg
