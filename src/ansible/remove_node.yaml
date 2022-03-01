@@ -1,8 +1,18 @@
 ---
 
-- name: Deploy Kafka
+- name: Remove nodes
   hosts: masters
   become: yes
 
   roles:
     - remove-workernode
+ 
+- name: remove rke service
+  hosts: "{{ remove_node_list }}"
+  become: yes
+  
+  tasks:
+    - name: Stop RKE2 service
+      systemd:
+        name: "rke2-agent.service"
+        state: stopped
