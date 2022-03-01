@@ -13,8 +13,9 @@
   register: diskinit
  
 - name: display disk init status
+  tags: vg
   debug: 
-    msg: diskinit
+    var: diskinit
 
 - name: create initial partition
   tags: vg
