@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -xv
 
 for duids in `cat /etc/miniodiskuid`
 do
