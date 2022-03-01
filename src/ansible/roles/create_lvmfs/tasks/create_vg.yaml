@@ -1,4 +1,31 @@
 ---
+
+- name: copy script
+  tags: vg
+  copy:
+    src: files/check_disk_init.sh
+    dest: /tmp/check_disk_init.sh
+    mode: 0744
+
+- name: run script to check if disk is initizlied
+  tags: vg
+  shell: /tmp/check_disk_init.sh "{{ item.disk }}"
+  register: diskinit
+
+- name: create initial partition
+  tags: vg
+  parted:
+    device: "{{ item.disk }}"
+    part_type: logical
+    label: gpt
+    number: 1
+    part_start: 0MB
+    part_end: 100MB
+    flags: [ lvm ]
+    unit: MB
+    state: present
+  when:  diskinit  == "no"
+
 - name: display info
   tags: vg
   parted:
@@ -13,10 +40,8 @@
     endnum:  "{{ disk_info.partitions[-1].num }}"
     part_size: "{{ item.size }}"
     disk: "{{ item.disk}}"
-    mode: "{{ item.mode }}"
     vgname: "{{ item.vgname }}"
     label: "{{ item.label }}"
-    pvlist: ""
 
 - name: create partition
   tags: vg
@@ -31,15 +56,26 @@
     unit: MB
     state: present
 
+- name: copy script
+  tags: vg
+  copy:
+    src: files/check_vg.sh
+    dest: /tmp/check_vg.sh
+    mode: 0744
+- name: run script to check if vg exists
+  tags: vg
+  shell: /tmp/check_vg.sh "{{ vgname }}"
+  register: vgexists
+
 - name: create vg
   tags: vg
   lvg:
     vg: "{{ vgname }}"
     pvs: "{{ disk + ((endnum | int | abs) + 1) | string}}"
-  when:  mode  == "new"
+  when:  vgexists  == "no"
 
 - name: extend vg
   tags: vg
   shell: |
     vgextend "{{ vgname }}" "{{ disk + ((endnum | int | abs) + 1) | string}}"
-  when:  mode  == "extend"
+  when:  vgexists  == "yes"
