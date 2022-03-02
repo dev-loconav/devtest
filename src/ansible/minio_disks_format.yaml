@@ -13,4 +13,4 @@
         shell: /tmp/format_minio_disks.sh
       
       - name: Fetch the file from remote to local
-        fetch: src=/tmp/diskhostmapping dest=/tmp/diskhostmapping{{inventory.hostname}} mode=0777 flat=yes
+        fetch: src=/tmp/diskhostmapping dest=/tmp/diskhostmapping{{inventory_hostname}} mode=0777 flat=yes
