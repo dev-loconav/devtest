@@ -10,7 +10,5 @@
           mode: 0744
       - name: run script to format disks
         shell: /tmp/format_minio_disks.sh
-        register: fm
-      - name: display output
-        debug:
-          var: fm.stdout
+      – name: Fetch the file from remote to local
+      fetch: src=/tmp/diskhostmapping dest=/tmp/diskhostmapping{{inventory.hostname}} mode=0777 flat=yes
