@@ -13,7 +13,7 @@
         shell: /tmp/format_minio_disks.sh
         register: disks_to_format
       
-       - name: find if disk is formated and format it
+      - name: find if disk is formated and format it
         shell: |
           dh=`echo $item | cut -d":" -f1`
           dd=`echo $item | cut -d":" -f2`
