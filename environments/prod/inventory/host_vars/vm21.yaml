@@ -28,7 +28,7 @@ fs:
     lvname: "kafkadatalv"
     vgname: vg1
     size: 8
-    mode: new  #new|extend
+    mode: extend  #new|extend
   - mountpoint: "/zkdata"
     lvname: "zkdatalv"
     vgname: vg1
