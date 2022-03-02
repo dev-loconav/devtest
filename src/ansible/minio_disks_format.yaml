@@ -11,6 +11,8 @@
       
       - name: run script to format disks
         shell: /tmp/format_minio_disks.sh
+        register: disks_to_format
       
-      - name: Fetch the file from remote to local
-        fetch: src=/tmp/diskhostmapping dest=/tmp/diskhostmapping{{inventory_hostname}} mode=0777 flat=yes
+      - name: display
+        debug:
+          var: disks_to_format.stdout
