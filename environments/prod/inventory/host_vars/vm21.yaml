@@ -11,15 +11,10 @@ miniodisks:
 
 ####disks must have atleast 1 partition
 vg:
-  - no: 1
-    vgname: vg1
-    disk: /dev/sdc
-    size: 5000
-    label: gpt
   - no: 2
     vgname: vg1
     disk: /dev/sdc
-    size: 5000
+    size: 7000
     label: gpt
 
 
