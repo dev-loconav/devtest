@@ -13,14 +13,11 @@
 
  
 - name: find if disk is formated and format it
-  
+  shell: /tmp/f.sh "{{ item.split(',') | first }}" "{{ item.split(',') | second }}"
   delegate_to: "{{ k8s_master }}"
   vars: 
     - ansible_ssh_user: deployer
     - ansible_ssh_pass: deployer
   become: true
-  debug:
-    msg: "{{ item.split(',') | first }}"
-  
   with_items: "{{ disks_to_format.stdout_lines }}"
 
