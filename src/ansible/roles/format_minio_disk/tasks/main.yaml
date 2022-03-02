@@ -6,11 +6,17 @@
     dest: /tmp/format_minio_disks.sh
     mode: 0744
 
+- name: copy script 
+  copy:
+    src: files/format_minio_disks1.sh
+    dest: /tmp/format_minio_disks1.sh
+    mode: 0744
       
 - name: run script to format disks
   shell: /tmp/format_minio_disks.sh
   register: disks_to_format
-      
+
+ 
 - name: find if disk is formated and format it
   shell: |
     dh=`echo $item | cut -d":" -f1`
