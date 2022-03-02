@@ -8,12 +8,12 @@
 - name: Deploy Postgres Operator
   shell: helm install postgres-operator /tmp/postgres-operator/charts/postgres-operator
 
-#- name: Create PV
-#  shell: bash -ic "kubectl apply -f /tmp/postgres-operator/manifests/{{ item }}"
-#  with_items:
-#    - 'pv1.yaml'
-#    - 'pv2.yaml'
-#    - 'pv3.yaml'
+- name: Create PV
+  shell: bash -ic "kubectl apply -f /tmp/postgres-operator/manifests/{{ item }}"
+  with_items:
+    - 'pv1.yaml'
+    - 'pv2.yaml'
+    - 'pv3.yaml'
 
 - name: Wait for pods to come up
   shell: bash -ic "kubectl get pods -o json -l app.kubernetes.io/name=postgres-operator" 
