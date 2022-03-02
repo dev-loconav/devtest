@@ -24,6 +24,7 @@
     if [ $dcount == 1 ]
     then
                bash -ic "kubectl directpv drives format --drives $dd --nodes $dh --force"
+               echo "Am I even coming here?" >> /tmp/output.$dh
     fi
   delegate_to: "{{ k8s_master }}"
   become: true
