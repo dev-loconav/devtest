@@ -8,7 +8,7 @@
 
 - name: set vars
   set_fact:
-    mh: groups[rke2_servers_group_name].0
+    mh: "{{ k8s_master }}"
 
 - name: diplay
   debug:
