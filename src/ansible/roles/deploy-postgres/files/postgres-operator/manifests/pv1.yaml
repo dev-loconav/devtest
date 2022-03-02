@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: {{ item }}
+  name: pg-pv1
   labels:
     type: local
 spec:
