@@ -11,7 +11,7 @@
     mh: hostvars[groups[rke2_servers_group_name].0]
 
 - name: diplay
-   debug:
+  debug:
      var: mh
        
 - name: run script to format disks
