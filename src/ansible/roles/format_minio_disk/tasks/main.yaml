@@ -1,0 +1,32 @@
+ ---  
+  
+      
+- name: copy script 
+  copy:
+    src: files/format_minio_disks.sh
+    dest: /tmp/format_minio_disks.sh
+    mode: 0744
+
+- name: set vars
+  set_fact:
+    mh: hostvars[groups[rke2_servers_group_name].0]
+
+- name: diplay
+   debug:
+     var: mh
+       
+- name: run script to format disks
+  shell: /tmp/format_minio_disks.sh
+  register: disks_to_format
+      
+- name: find if disk is formated and format it
+  shell: |
+    dh=`echo $item | cut -d":" -f1`
+    dd=`echo $item | cut -d":" -f2`
+    dcount=`kubectl directpv drives ls | grep -w $dd | grep -w $dh | grep "Available" | wc -l`
+    if [ $dcount == 1 ]
+    then
+                kubectl directpv drives format --drives $dd --nodes $dh --force
+    fi
+  delegate_to: localhost
+  with_items: "{{ disks_to_format.stdout_lines }}"
