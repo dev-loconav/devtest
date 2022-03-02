@@ -2,11 +2,11 @@
 miniodisks:
   - part: 1
     disk: /dev/sdc
-    size: 1000
+    size: 5000
     label: gpt
   - part: 2
     disk: /dev/sdc
-    size: 1000
+    size: 5000
     label: gpt
 
 ####disks must have atleast 1 partition
