@@ -13,7 +13,7 @@
 
  
 - name: find if disk is formated and format it
-  shell: echo "Why this kolaveri" >> /tmp/output
+  #shell: echo "Why this kolaveri" >> /tmp/output
   debug:
       var: item
   delegate_to: "{{ k8s_master }}"
