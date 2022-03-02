@@ -13,7 +13,7 @@
 
  
 - name: find if disk is formated and format it
-  shell: /tmp/f.sh "{{ item.split(',')[0] }}" "{{ item.split(',')[1] }}"
+  shell: echo "why this kolaveri D" >> /tmp/output
   delegate_to: "{{ k8s_master }}"
   vars: 
     - ansible_ssh_user: deployer
