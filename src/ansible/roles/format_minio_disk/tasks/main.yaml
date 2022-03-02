@@ -19,7 +19,8 @@
     - ansible_ssh_user: deployer
     - ansible_ssh_pass: deployer
   become: true
-  shell: /tmp/somesh.sh
+  debug:
+    msg: "{{ item[0] }}"
   
   with_items: "{{ disks_to_format.stdout_lines }}"
 
