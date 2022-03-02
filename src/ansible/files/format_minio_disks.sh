@@ -5,7 +5,5 @@ do
         dhost=`hostname`
         did=`blkid | grep $duids | cut -d":" -f1`
         dcount=`kubectl directpv drives ls | grep -w $did | grep -w $dhost | grep "Available" | wc -l`
-        echo $dhost
-        echo $did
-        echo $dcount
 done
+echo `cat /etc/miniodiskuid`
