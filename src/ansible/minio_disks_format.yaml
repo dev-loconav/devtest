@@ -10,7 +10,7 @@
           mode: 0744
       - name: set vars
         set_fact:
-          mh: groups[rke2_servers_group_name].0
+          mh: hostvars[groups[rke2_servers_group_name].0]
     
       - name: diplay
         debug:
