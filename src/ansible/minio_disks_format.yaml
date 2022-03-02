@@ -15,4 +15,4 @@
       
       - name: display
         debug:
-          msg: disks_to_format
+          var: disks_to_format
