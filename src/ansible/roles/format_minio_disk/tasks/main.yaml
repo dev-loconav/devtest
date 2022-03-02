@@ -15,7 +15,7 @@
 - name: find if disk is formated and format it
   #shell: echo "Why this kolaveri" >> /tmp/output
   debug:
-      var: item
+      msg: "{{ item }}"
   delegate_to: "{{ k8s_master }}"
   vars: 
     - ansible_ssh_user: deployer
