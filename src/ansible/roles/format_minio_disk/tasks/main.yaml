@@ -2,13 +2,13 @@
       
 - name: copy script 
   copy:
-    src: files/format_minio_disks.sh
-    dest: /tmp/format_minio_disks.sh
+    src: files/find_disks_to_format.sh
+    dest: /tmp/find_disks_to_format.sh
     mode: 0744
 
       
 - name: run script to format disks
-  shell: /tmp/format_minio_disks.sh
+  shell: /tmp/find_disks_to_format.sh
   register: disks_to_format
 
  
