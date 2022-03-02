@@ -1,5 +1,4 @@
- ---  
-  
+---  
       
 - name: copy script 
   copy:
