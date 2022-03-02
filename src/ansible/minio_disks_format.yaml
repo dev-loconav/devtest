@@ -15,4 +15,4 @@
       
       - name: display
         debug:
-          msg: disks_to_format.stdout
+          msg: {{ disks_to_format.stdout }}
