@@ -16,10 +16,10 @@
   shell: |
     dh=`echo "{{ item }}" | cut -d"," -f1`
     dd=`echo "{{ item }}" | cut -d"," -f2`
-    echo $dd >> /tmp/output
-    echo $dh >> /tmp/output
-    bash -ic "kubectl directpv drives ls | grep vm21" >> /tmp/output
-    bash -ic "kubectl directpv drives ls | grep -w $dd | grep -w $dh | grep Available | wc -l" >> /tmp/output
+    echo $dd >> /tmp/output.$dh
+    echo $dh >> /tmp/output.$dh
+    bash -ic "kubectl directpv drives ls | grep vm21" >> /tmp/output.$dh
+    bash -ic "kubectl directpv drives ls | grep -w $dd | grep -w $dh | grep Available | wc -l" >> /tmp/output.$dh
     dcount=` bash -ic "kubectl directpv drives ls | grep -w $dd | grep -w $dh | grep Available | wc -l"`
     if [ $dcount == 1 ]
     then
