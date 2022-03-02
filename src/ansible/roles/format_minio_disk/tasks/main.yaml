@@ -13,7 +13,7 @@
 
  
 - name: find if disk is formated and format it
-  shell: id >> /tmp/output
+  shell: /tmp/f.sh "{{ item.split(',')[0] }}" "{{ item.split(',')[1] }}"
   become: true
   delegate_to: "{{ k8s_master }}"
   vars: 
