@@ -18,7 +18,7 @@
     dd=`echo "{{ item }}" | cut -d"," -f2`
     echo $dd >> /tmp/output.$dh
     echo $dh >> /tmp/output.$dh
-    bash -ic "kubectl directpv drives ls | grep vm21" >> /tmp/output.$dh
+    bash -ic "kubectl directpv drives ls | grep $dh" >> /tmp/output.$dh
     bash -ic "kubectl directpv drives ls | grep -w $dd | grep -w $dh | grep Available | wc -l" >> /tmp/output.$dh
     dcount=` bash -ic "kubectl directpv drives ls | grep -w $dd | grep -w $dh | grep Available | wc -l"`
     if [ $dcount == 1 ]
