@@ -15,4 +15,4 @@
       
       - name: display
         debug:
-          var: disks_to_format.stdout | split("\n")
+          var: disks_to_format.stdout
