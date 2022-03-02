@@ -20,7 +20,7 @@
     - ansible_ssh_pass: deployer
   become: true
   debug:
-    msg: "{{ item | split(",") | first }}"
+    msg: "{{ item | split(',') | first }}"
   
   with_items: "{{ disks_to_format.stdout_lines }}"
 
