@@ -6,14 +6,7 @@
     dest: /tmp/format_minio_disks.sh
     mode: 0744
 
-- name: set vars
-  set_fact:
-    mh: "{{ k8s_master }}"
-
-- name: diplay
-  debug:
-     var: mh
-       
+      
 - name: run script to format disks
   shell: /tmp/format_minio_disks.sh
   register: disks_to_format
@@ -27,5 +20,5 @@
     then
                 kubectl directpv drives format --drives $dd --nodes $dh --force
     fi
-  delegate_to: localhost
+  delegate_to: "{{ k8s_master }}"
   with_items: "{{ disks_to_format.stdout_lines }}"
