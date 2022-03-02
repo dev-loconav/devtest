@@ -21,7 +21,7 @@
     bash -ic "kubectl directpv drives ls | grep $dh | grep -w $dd" >> /tmp/output.$dh
     bash -ic "kubectl directpv drives ls | grep -w $dd | grep  -w $dh | grep Available | wc -l" >> /tmp/output.$dh
     dcount=` bash -ic "kubectl directpv drives ls | grep -w $dd | grep -w $dh | grep Available | wc -l"`
-    if [ $dcount == 1 ]
+    if [ $dcount == "1" ]
     then
                bash -ic "kubectl directpv drives format --drives $dd --nodes $dh --force"
                echo "Am I even coming here?" >> /tmp/output.$dh
