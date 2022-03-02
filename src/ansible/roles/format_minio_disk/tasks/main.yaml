@@ -13,15 +13,7 @@
 
  
 - name: find if disk is formated and format it
-  shell: |
-    dh=`echo "{{ item }}" | cut -d":" -f1`
-    dd=`echo "{{ item }}" | cut -d":" -f2`
-    dcount=`kubectl directpv drives ls | grep -w $dd | grep -w $dh | grep "Available" | wc -l`
-    if [ $dcount == 1 ]
-    then
-                kubectl directpv drives format --drives $dd --nodes $dh --force
-    fi
-    echo $dcount >> /tmp/output
+  shell: echo "{{ item }}" >> /tmp/som
   delegate_to: "{{ k8s_master }}"
   vars: 
     - ansible_ssh_user: deployer
