@@ -5,4 +5,6 @@ do
         dhost=`hostname`
         did=`blkid | grep $duids | cut -d":" -f1`
         echo $dhost:$did >> /tmp/diskhostmapping
+        cat /tmp/diskhostmapping
+        
 done
