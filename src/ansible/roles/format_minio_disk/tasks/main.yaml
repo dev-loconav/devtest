@@ -16,7 +16,7 @@
   shell: |
     dh=`echo "{{ item }}" | cut -d":" -f1`
     dd=`echo "{{ item }}" | cut -d":" -f2`
-    bash -ic "kubectl get nodes" >> /tmp/output
+    bash -ic "kubectl directpv drives ls" >> /tmp/output
     bash -ic "kubectl directpv drives ls | grep -w $dd | grep -w $dh | grep Available | wc -l" >> /tmp/output
     dcount=` bash -ic "kubectl directpv drives ls | grep -w $dd | grep -w $dh | grep Available | wc -l"`
     if [ $dcount == 1 ]
