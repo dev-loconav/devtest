@@ -1,5 +1,6 @@
 #!/bin/bash
 
+rm /tmp/diskhostmapping
 for duids in `cat /etc/miniodiskuid`
 do
         dhost=`hostname`
