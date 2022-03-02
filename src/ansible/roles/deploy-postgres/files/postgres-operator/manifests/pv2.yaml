@@ -1,21 +1,13 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: loco-pv22
+  name: pg-pv2
+  labels:
+    type: local
 spec:
   capacity:
-    storage: 15Gi
+    storage: 10Gi
   accessModes:
-  - ReadWriteOnce
-  persistentVolumeReclaimPolicy: Retain
-  storageClassName: local-storage
-  local:
-    path: /dev/sdc
-  nodeAffinity:
-    required:
-      nodeSelectorTerms:
-      - matchExpressions:
-        - key: kubernetes.io/hostname
-          operator: In
-          values:
-          - vm22
+    - ReadWriteOnce
+  hostPath:
+    path: "/pgdata"
