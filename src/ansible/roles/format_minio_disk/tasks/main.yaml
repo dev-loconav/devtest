@@ -13,10 +13,11 @@
 
  
 - name: find if disk is formated and format it
-  shell: echo "{{ item }}" >> /tmp/som
+  
   delegate_to: "{{ k8s_master }}"
   vars: 
     - ansible_ssh_user: deployer
     - ansible_ssh_pass: deployer
+  shell: echo "{{ item }}" >> /tmp/som
   with_items: "{{ disks_to_format.stdout_lines }}"
 
