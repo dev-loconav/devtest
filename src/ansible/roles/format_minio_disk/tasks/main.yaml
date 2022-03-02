@@ -8,7 +8,7 @@
 
 - name: set vars
   set_fact:
-    mh: hostvars[groups[rke2_servers_group_name].0]
+    mh: groups[rke2_servers_group_name].0
 
 - name: diplay
   debug:
