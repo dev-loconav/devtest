@@ -10,3 +10,7 @@
           mode: 0744
       - name: run script to format disks
         shell: /tmp/format_minio_disks.sh
+        register: fm
+      - name: display output
+        debug:
+          var: fm.stdout
