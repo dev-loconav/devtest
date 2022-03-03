@@ -11,7 +11,7 @@ miniodisks:
 
 ####disks must have atleast 1 partition
 vg:
-  - no: 2
+  - no: 1
     vgname: vg1
     disk: /dev/sdc
     size: 7000
@@ -22,12 +22,12 @@ fs:
   - mountpoint: "/kafkadata"
     lvname: "kafkadatalv"
     vgname: vg1
-    size: 8
-    mode: extend  #new|extend
+    size: 1
+    mode: new  #new|extend
   - mountpoint: "/zkdata"
     lvname: "zkdatalv"
     vgname: vg1
-    size: 2
+    size: 1
     mode: new  #new|extend
   - mountpoint: "/pgdata"
     lvname: "pgdatalv"
@@ -37,5 +37,5 @@ fs:
   - mountpoint: "/redisdata"
     lvname: "redisdatalv"
     vgname: vg1
-    size: 2
+    size: 1
     mode: new  #new|extend
