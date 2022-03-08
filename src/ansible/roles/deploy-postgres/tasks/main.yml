@@ -5,8 +5,14 @@
     src: postgres-operator
     dest: /tmp
 
+- name: create postgres-operator ns
+  shell: bash -ic "kubectl create ns postgres-operator"
+  
+- name: create postgres db ns
+  shell: bash -ic "kubectl create ns locopgdb"
+
 - name: Deploy Postgres Operator
-  shell: helm install postgres-operator /tmp/postgres-operator/charts/postgres-operator
+  shell: helm install postgres-operator /tmp/postgres-operator/charts/postgres-operator -n postgres-operator
 
 - name: Create PV
   shell: bash -ic "kubectl apply -f /tmp/postgres-operator/manifests/{{ item }}"
@@ -16,31 +22,28 @@
     - 'pv3.yaml'
 
 - name: Wait for pods to come up
-  shell: bash -ic "kubectl get pods -o json -l app.kubernetes.io/name=postgres-operator" 
+  shell: bash -ic "kubectl get pods -o json -l app.kubernetes.io/name=postgres-operator -n postgres-operator" 
   register: kubectl_get_pods
   until: kubectl_get_pods.stdout|from_json|json_query('items[*].status.phase')|unique == ["Running"]
   retries: 40
   delay: 15
 
 - name: Deploy Postgres Operator UI
-  shell: helm install postgres-operator-ui /tmp/postgres-operator/charts/postgres-operator-ui
+  shell: helm install postgres-operator-ui /tmp/postgres-operator/charts/postgres-operator-ui -n postgres-operator
 
 - name: Wait for postgres-operator-ui pods to come up
-  shell: bash -ic "kubectl get pods -o json -l app.kubernetes.io/name=postgres-operator-ui"
+  shell: bash -ic "kubectl get pods -o json -l app.kubernetes.io/name=postgres-operator-ui -n postgres-operator"
   register: kubectl_get_pods
   until: kubectl_get_pods.stdout|from_json|json_query('items[*].status.phase')|unique == ["Running"]
   retries: 40
   delay: 15
 
 - name: Deploy Postgres DB
-  shell: bash -ic "kubectl create -f /tmp/postgres-operator/manifests/pgdb.yaml"
+  shell: bash -ic "kubectl create -f /tmp/postgres-operator/manifests/pgdb.yaml -n locopgdb"
 
 - name: Wait for postgres db pods to come up
-  shell: bash -ic "kubectl get pods -o json -l application=spilo -L spilo-role"
+  shell: bash -ic "kubectl get pods -o json -l application=spilo -L spilo-role -n locopgdb"
   register: kubectl_get_pods
   until: kubectl_get_pods.stdout|from_json|json_query('items[*].status.phase')|unique == ["Running"]
   retries: 40
   delay: 15
-
-
-
