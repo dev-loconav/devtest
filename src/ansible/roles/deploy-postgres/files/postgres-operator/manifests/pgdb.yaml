@@ -28,6 +28,6 @@ spec:
       memory: 100Mi
   teamId: loco
   volume:
-    size: 10Gi
+    size: 20Gi
 #    storageClass: local-storage
 
