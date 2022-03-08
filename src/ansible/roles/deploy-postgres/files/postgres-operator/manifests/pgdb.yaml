@@ -4,7 +4,7 @@ metadata:
   labels:
     team: loco
   name: loco-pgdb
-  namespace: default
+  namespace: locopgdb
 spec:
   allowedSourceRanges: null
   numberOfInstances: 3
@@ -29,5 +29,3 @@ spec:
   teamId: loco
   volume:
     size: 20Gi
-#    storageClass: local-storage
-
