@@ -1,0 +1,6 @@
+kubectl delete deployments strimzi-cluster-operator -n kafka
+kubectl delete rolebindings strimzi-cluster-operator strimzi-cluster-operator-entity-operator-delegation -n kafka
+kubectl delete clusterrolebindings strimzi-cluster-operator strimzi-cluster-operator-kafka-broker-delegation strimzi-cluster-operator-kafka-client-delegation
+kubectl delete ClusterRole strimzi-cluster-operator-global strimzi-cluster-operator-namespaced strimzi-entity-operator strimzi-kafka-broker strimzi-kafka-client
+kubectl delete crd strimzipodsets.core.strimzi.io kafkausers.kafka.strimzi.io kafkatopics.kafka.strimzi.io kafkas.kafka.strimzi.io kafkarebalances.kafka.strimzi.io kafkamirrormakers.kafka.strimzi.io kafkamirrormaker2s.kafka.strimzi.io kafkaconnects.kafka.strimzi.io kafkaconnectors.kafka.strimzi.io kafkabridges.kafka.strimzi.io
+kubectl delete ns kafka
