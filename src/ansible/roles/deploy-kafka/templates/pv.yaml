@@ -6,8 +6,8 @@ metadata:
     type: local
 spec:
   capacity:
-    storage: 10Gi
+    storage: 15Gi
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: "/stream"
+    path: "/kafkazkdata"
