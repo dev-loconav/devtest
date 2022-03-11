@@ -5,23 +5,23 @@
     src: pv.yaml
     dest: "/tmp/pv_{{ item }}.yaml"
   with_items:
-    - 'pv1'
-    - 'pv2'
-    - 'pv3'
-    - 'pv4'
-    - 'pv5'
-    - 'pv6'
+    - 'kafka_pv1'
+    - 'kafka_pv2'
+    - 'kafka_pv3'
+    - 'kafka_pv4'
+    - 'kafka_pv5'
+    - 'kafka_pv6'
 
 
 - name: Create PV
   shell: bash -ic "kubectl apply -f /tmp/pv_{{ item }}.yaml"
   with_items:
-    - 'pv1'
-    - 'pv2'
-    - 'pv3'
-    - 'pv4'
-    - 'pv5'
-    - 'pv6'
+    - 'kafka_pv1'
+    - 'kafka_pv2'
+    - 'kafka_pv3'
+    - 'kafka_pv4'
+    - 'kafka_pv5'
+    - 'kafka_pv6'
 
 - name: Create namespace
   shell: bash -ic "kubectl create ns kafka"
