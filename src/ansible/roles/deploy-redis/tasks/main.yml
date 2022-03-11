@@ -5,8 +5,23 @@
     src: redis-data
     dest: /tmp
 
-- name: Create PV
-  shell: bash -ic "kubectl apply -f /tmp/redis-data/pv.yaml"
+
+- name: Create redis pv files 
+  template:
+    src: redis-data/pv.yaml
+    dest: "/tmp/pv_{{ item }}.yaml"
+  with_items:
+    - '1'
+    - '2'
+    - '3'
+    
+- name: Create redis PV
+  shell: bash -ic "kubectl apply -f /tmp/pv_{{ item }}.yaml"
+  with_items:
+    - '1'
+    - '2'
+    - '3'
+
 
 - name: Create namespace
   shell: bash -ic "kubectl create ns {{ item }}"
@@ -23,7 +38,7 @@
   shell: bash -ic "helm test redis-operator --namespace redis-operator"
   
 - name: Deploy redis
-  shell: bash -ic "helm upgrade redis /tmp/redis-data/charts/redis-0.9.0.tgz --install -n redis"
+  shell: bash -ic "helm upgrade redis /tmp/redis-data/charts/redis-cluster.0.9.0.tar.gz --install -n redis"
 
 - name: Wait for pods to come up
   shell: bash -ic "kubectl get pods -o json -n redis" 
