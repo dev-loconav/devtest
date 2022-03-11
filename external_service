@@ -1,0 +1,13 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: redis
+  namespace: default
+spec:
+  type: ExternalName
+  externalName: redis-cluster-leader.redis.svc.cluster.local
+  ports:
+  - name: redis-client
+    port: 6379
+  - name: redis-exporter
+    port: 9121
