@@ -48,5 +48,5 @@
   shell: bash -ic "kubectl create -f /tmp/kafka/kafka-cluster.yaml -n kafka"
 
 - name: Wait for pods to come up
-  shell: bash -ic "kubectl wait kafka/my-cluster --for=condition=Ready --timeout=300s -n kafka"
+  shell: bash -ic "kubectl wait kafka/my-cluster --for=condition=Ready --timeout=600s -n kafka"
 
