@@ -5,32 +5,32 @@
     src: pv_kafka.yaml
     dest: "/tmp/pv_{{ item }}.yaml"
   with_items:
-    - 'kafka_pv1'
-    - 'kafka_pv2'
-    - 'kafka_pv3'
+    - 'kafkapv1'
+    - 'kafkapv2'
+    - 'kafkapv3'
 
 - name: Create zk pv files 
   template:
     src: pv_zk.yaml
     dest: "/tmp/pv_{{ item }}.yaml"
   with_items:
-    - 'zk_pv1'
-    - 'zk_pv2'
-    - 'zk_pv3'
+    - 'zkpv1'
+    - 'zkpv2'
+    - 'zkpv3'
 
 - name: Create kafka PV
   shell: bash -ic "kubectl apply -f /tmp/pv_{{ item }}.yaml"
   with_items:
-    - 'kafka_pv1'
-    - 'kafka_pv2'
-    - 'kafka_pv3'
+    - 'kafkapv1'
+    - 'kafkapv2'
+    - 'kafkapv3'
 
 - name: Create zk PV
   shell: bash -ic "kubectl apply -f /tmp/pv_{{ item }}.yaml"
   with_items:
-    - 'zk_pv1'
-    - 'zk_pv2'
-    - 'zk_pv3'
+    - 'zkpv1'
+    - 'zkpv2'
+    - 'zkpv3'
 
 - name: Create namespace
   shell: bash -ic "kubectl create ns kafka"
