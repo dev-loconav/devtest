@@ -6,7 +6,7 @@
     dest: /tmp
 
 
-- name: Create redis pv files 
+- name: Create redis  pv files 
   template:  
     src: pv.yaml
     dest: "/tmp/pv_{{ item }}.yaml"
@@ -14,6 +14,9 @@
     - '1'
     - '2'
     - '3'
+    - '4'
+    - '5'
+    - '6'
     
 - name: Create redis PV
   shell: bash -ic "kubectl apply -f /tmp/pv_{{ item }}.yaml"
@@ -21,7 +24,9 @@
     - '1'
     - '2'
     - '3'
-
+    - '4'
+    - '5'
+    - '6'
 
 - name: Create namespace
   shell: bash -ic "kubectl create ns {{ item }}"
@@ -41,9 +46,9 @@
   shell: bash -ic "helm upgrade redis /tmp/redis-data/charts/redis-cluster.0.9.0.tar.gz --install -n redis"
 
 - name: Wait for pods to come up
-  shell: bash -ic "kubectl get pods -o json -n redis" 
-  register: kubectl_get_pods
-  until: kubectl_get_pods.stdout|from_json|json_query('items[*].status.phase')|unique == ["Running"]
+  shell: bash -ic "kubectl get pods -n redis | grep '2/2' | wc -l" 
+  register: kubectl_get_pods_ready_count
+  until: kubectl_get_pods_ready_count.stdout == 6
   retries: 40
   delay: 15
 
