@@ -29,7 +29,7 @@ spec:
       inter.broker.protocol.version: "3.1"
     storage:
       type: persistent-claim
-      size: 5Gi
+      size: 15Gi
       deleteClaim: false
   zookeeper:
     template:
