@@ -7,7 +7,7 @@
 
 
 - name: Create redis pv files 
-    src: /tmp/redis-data/pv.yaml
+    src: "/tmp/redis-data/pv.yaml"
     dest: "/tmp/pv_{{ item }}.yaml"
   with_items:
     - '1'
