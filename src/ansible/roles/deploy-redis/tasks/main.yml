@@ -8,7 +8,7 @@
 
 - name: Create redis pv files 
   template:
-    src: /tmp/pv.yaml
+    src: /tmp/redis-data/pv.yaml
     dest: "/tmp/pv_{{ item }}.yaml"
   with_items:
     - '1'
