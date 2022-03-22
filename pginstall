@@ -169,3 +169,16 @@ sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)
 sudo apt-get update
 sudo apt install postgresql-client-11
 pg_basebackup -V
+
+
+
+kubectl get secrets -o yaml postgres.loco-pgdb.credentials.postgresql.acid.zalan.do -n locopgdb
+
+echo "cmljYXV2R3dkM0pobW9OWGtObFA1MEx0ZUVhUzhMOHY3dDEzUlNuTVV6UHFsWG12dHAxNmlrcXYwelZoM2JVVg==" | base64 -d
+kubectl exec --stdin --tty loco-pgdb-0  -n locopgdb -- /bin/bash
+psql -U postgres
+\password
+enter new password
+
+kubectl delete po postgres-operator-6dd8984889-6gx5z -n postgres-operator
+
