@@ -182,3 +182,8 @@ enter new password
 
 kubectl delete po postgres-operator-6dd8984889-6gx5z -n postgres-operator
 
+
+registries configuration
+
+documentation
+
