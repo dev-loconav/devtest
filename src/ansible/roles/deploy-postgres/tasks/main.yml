@@ -15,9 +15,9 @@
   tags: pgdb
   ignore_errors: True
 
-- name: create linehaul secret
-  shell: bash -ic "kubectl apply -f /tmp/postgres-operator/manifests/linehaul-secret.yaml"
-  tags: pgdb
+#- name: create linehaul secret
+#  shell: bash -ic "kubectl apply -f /tmp/postgres-operator/manifests/linehaul-secret.yaml"
+#  tags: pgdb
 
 
 - name: Deploy Postgres Operator
