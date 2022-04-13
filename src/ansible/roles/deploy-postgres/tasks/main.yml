@@ -13,6 +13,7 @@
 - name: create postgres db ns
   shell: bash -ic "kubectl create ns locopgdb"
   tags: pgdb
+  ignore_errors: True
 
 - name: Deploy Postgres Operator
   shell: helm install postgres-operator /tmp/postgres-operator/charts/postgres-operator -n postgres-operator
