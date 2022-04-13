@@ -10,6 +10,7 @@ pipeline {
                     ansiblePlaybook( 
                         playbook: 'src/ansible/deploy_pg.yaml',
                         inventory: 'environments/prod/inventory/host.ini', 
+                        tags: "pgop",
                         colorized: true) 
                 }
             }
