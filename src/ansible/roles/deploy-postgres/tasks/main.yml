@@ -4,15 +4,19 @@
   copy:
     src: postgres-operator
     dest: /tmp
-
+  tags: [ pgdb, pgop ]
+  
 - name: create postgres-operator ns
   shell: bash -ic "kubectl create ns postgres-operator"
+  tags: pgop
   
 - name: create postgres db ns
   shell: bash -ic "kubectl create ns locopgdb"
+  tags: pgdb
 
 - name: Deploy Postgres Operator
   shell: helm install postgres-operator /tmp/postgres-operator/charts/postgres-operator -n postgres-operator
+  tags: pgop
 
 - name: Create PV
   shell: bash -ic "kubectl apply -f /tmp/postgres-operator/manifests/{{ item }}"
@@ -20,6 +24,7 @@
     - 'pv1.yaml'
     - 'pv2.yaml'
     - 'pv3.yaml'
+  tags: pgdb
 
 - name: Wait for pods to come up
   shell: bash -ic "kubectl get pods -o json -l app.kubernetes.io/name=postgres-operator -n postgres-operator" 
@@ -27,9 +32,11 @@
   until: kubectl_get_pods.stdout|from_json|json_query('items[*].status.phase')|unique == ["Running"]
   retries: 40
   delay: 15
+  tags: pgop
 
 - name: Deploy Postgres Operator UI
   shell: helm install postgres-operator-ui /tmp/postgres-operator/charts/postgres-operator-ui -n postgres-operator
+  tags: pgop
 
 - name: Wait for postgres-operator-ui pods to come up
   shell: bash -ic "kubectl get pods -o json -l app.kubernetes.io/name=postgres-operator-ui -n postgres-operator"
@@ -37,13 +44,18 @@
   until: kubectl_get_pods.stdout|from_json|json_query('items[*].status.phase')|unique == ["Running"]
   retries: 40
   delay: 15
+  tags: pgop
 
 - name: Deploy Postgres DB
   shell: bash -ic "kubectl create -f /tmp/postgres-operator/manifests/pgdb.yaml -n locopgdb"
+  tags: pgdb
+
 
 - name: Wait for postgres db pods to come up
   shell: bash -ic "kubectl get pods -o json -l application=spilo -L spilo-role -n locopgdb"
   register: kubectl_get_pods
   until: kubectl_get_pods.stdout|from_json|json_query('items[*].status.phase')|unique == ["Running"]
-  retries: 40
+  retries: 100
   delay: 15
+  tags: pgdb
+
