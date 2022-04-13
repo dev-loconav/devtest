@@ -48,7 +48,7 @@
   tags: pgop
 
 - name: Deploy Postgres DB
-  shell: bash -ic "kubectl create -f /tmp/postgres-operator/manifests/pgdb.yaml -n locopgdb"
+  shell: bash -ic "kubectl apply -f /tmp/postgres-operator/manifests/pgdb.yaml -n locopgdb"
   tags: pgdb
 
 
