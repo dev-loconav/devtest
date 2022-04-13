@@ -9,14 +9,20 @@ spec:
   allowedSourceRanges: null
   numberOfInstances: 3
   users:
-    zalando:  # database owner
+    linehaul:  # database owner
     - superuser
     - createdb
-    foo_user: []  # role for application foo
   databases:
-    foo: zalando  # dbname: owner
-  preparedDatabases:
-    bar: {}
+    telematics_db: linehaul
+    fuel_db: linehaul
+    summarizer_db: linehaul
+    movement_db: linehaul
+    geocoder_db: linehaul
+    mocker_db: linehaul
+    provider_db: linehaul
+    datamocker_db: linehaul
+    linehaul_db: linehaul
+    alerts_db: linehaul
   postgresql:
     version: "14"
   resources:
