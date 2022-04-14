@@ -1,3 +1,34 @@
+
+
+kubectl delete crd operatorconfigurations.acid.zalan.do postgresqls.acid.zalan.do postgresteams.acid.zalan.do
+
+kubectl delete postgresql loco-pgdb -n locopgdb
+
+helm delete postgres-operator -n postgres-operator
+
+helm install postgres-operator-ui -n postgres-operator
+
+kubectl get secrets -o yaml postgres.loco-pgdb.credentials.postgresql.acid.zalan.do -n locopgdb | grep password | awk '{print $2}' | base64 -d
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 git clone https://github.com/zalando/postgres-operator.git
 cd postgres-operator
 
