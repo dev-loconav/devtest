@@ -56,13 +56,13 @@
     owner: zookeeper
     group: zookeeper
 
-#- name: Zookeeper | Ensures data dir {{ zookeeper_dir }} exists
-#  file:
-#    path: "{{ zookeeper_dir }}"
-#    recurse: yes
-#    state: link
-#    owner: zookeeper
-#    group: zookeeper
+- name: Zookeeper | Ensures data dir {{ zookeeper.install_dir }}/{{ zookeeper_name }} exists
+  file:
+    path: "{{ zookeeper.install_dir }}/{{ zookeeper_name }}"
+    recurse: yes
+    state: directory
+    owner: zookeeper
+    group: zookeeper
 
 - name: Zookeeper | Ensures log dir {{ zookeeper_dir }}/log exists
   file:
