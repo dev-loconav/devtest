@@ -1,0 +1,17 @@
+---
+zookeeper:
+  version: 3.4.14
+  mirror: https://archive.apache.org/dist/zookeeper
+  install_dir: /opt
+  data_dir: /mnt/data/zookeeper
+  tick_time: 2000
+kafka:
+  version: 2.6.0
+  scala_version: 2.13
+  mirror: http://archive.apache.org/dist 
+  data_dir: /mnt/data/kafka/data
+  install_dir: /opt
+zookeeper_client_port: 2181
+log_retention_hours: 720
+java_packages:
+  - java-1.8.0-openjdk

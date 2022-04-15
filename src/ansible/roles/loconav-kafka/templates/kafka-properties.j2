@@ -1,0 +1,30 @@
+{{ ansible_managed | comment}}
+{% if kafka_cluster_info is defined %}
+broker.id={{ kafka_cluster_info[inventory_hostname] }}
+{% endif %}
+num.network.threads=3
+num.io.threads=8
+socket.send.buffer.bytes=102400
+socket.receive.buffer.bytes=102400
+socket.request.max.bytes=104857600
+log.dirs={{ kafka.data_dir }}
+num.partitions=1
+num.recovery.threads.per.data.dir=1
+offsets.topic.replication.factor=1
+transaction.state.log.replication.factor=1
+transaction.state.log.min.isr=1
+log.retention.hours={{ log_retention_hours }}
+log.segment.bytes=1073741824
+log.retention.check.interval.ms=300000
+{% if zookeeper_cluster_info is defined %}
+zookeeper.connect={% for key,value in zookeeper_cluster_info.items()|sort %}{{ key }}.lc:2181{% if not loop.last%},{% endif %}{% endfor %}
+
+{% else %}
+zookeeper.connect=localhost:2181
+{% endif %}
+zookeeper.connection.timeout.ms=6000
+group.initial.rebalance.delay.ms=0
+port=9092
+offsets.topic.replication.factor=1
+auto.create.topics.enable=false
+listeners=PLAINTEXT://{{ custom_hostname }}:9092

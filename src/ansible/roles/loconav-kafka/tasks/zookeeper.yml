@@ -1,0 +1,97 @@
+---
+- name: Zookeeper | create group
+  group:
+    name: zookeeper
+    state: present
+    system: yes
+
+- name: Zookeeper | create user
+  user:
+    name: zookeeper
+    group: zookeeper
+    createhome: no
+    system: yes
+    state: present
+
+- name: Zookeeper | Setting internal variable
+  set_fact:
+    zookeeper_name: "zookeeper-{{ zookeeper.version }}"
+
+- name: Zookeeper | Zookeeper | Setting internal variable - zookeeper_dir
+  set_fact:
+    zookeeper_dir: "{{ zookeeper.install_dir }}/zookeeper"
+
+- name: Zookeeper | Ensure Zookeeper tar is downloaded
+  get_url:
+    url: "{{ zookeeper.mirror }}/{{ zookeeper_name }}/{{ zookeeper_name }}.tar.gz"
+    dest: /tmp/
+
+
+- name: Zookeeper | Ensure tar is extracted
+  unarchive:
+    remote_src: yes
+    src: /tmp/{{ zookeeper_name }}.tar.gz
+    dest: "{{ zookeeper.install_dir }}"
+  ignore_errors: '{{ ansible_check_mode }}'
+
+- name: Zookeeper | create symlink to kafka
+  file:
+    path: "{{ zookeeper_dir }}"
+    state: link
+    src: "{{ zookeeper.install_dir }}/{{ zookeeper_name }}"
+  ignore_errors: '{{ ansible_check_mode }}' 
+
+# Config and start Zookeeper
+- name: Zookeeper | Ensure zoo.conf is present
+  template:
+    src: zoo.cfg
+    dest: "{{ zookeeper_dir }}/conf/zoo.cfg"
+  notify: restart zookeeper
+
+- name: Zookeeper | Ensures data dir {{ zookeeper.data_dir }} exists
+  file:
+    path: "{{ zookeeper.data_dir }}"
+    recurse: yes
+    state: directory
+    owner: zookeeper
+    group: zookeeper
+
+- name: Zookeeper | Ensures data dir {{ zookeeper_dir }} exists
+  file:
+    path: "{{ zookeeper_dir }}"
+    recurse: yes
+    state: directory
+    owner: zookeeper
+    group: zookeeper
+
+- name: Zookeeper | Ensures log dir {{ zookeeper_dir }}/log exists
+  file:
+    path: "{{ zookeeper_dir }}/log"
+    recurse: yes
+    state: directory
+    owner: zookeeper
+    group: zookeeper
+
+- name: Zookeeper | Ensure myid is set in {{ zookeeper.data_dir }}/myid
+  template:
+    src: myid
+    dest: "{{ zookeeper.data_dir }}/myid"
+  notify: restart zookeeper
+  when: zookeeper_cluster_info is defined 
+
+- name: Zookeeper | systemd start script
+  template:
+    src: zookeeper-systemd.j2
+    dest: /etc/systemd/system/zookeeper.service
+    owner: root
+    group: root
+    mode: 644
+  notify: start zookeeper
+
+- name: Zookeeper | configure zookeeper to use service
+  systemd:
+    daemon_reload: yes
+    enabled: yes
+    state: started
+    name: zookeeper.service
+

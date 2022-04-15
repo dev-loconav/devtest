@@ -1,0 +1,18 @@
+{{ ansible_managed | comment }}
+[Unit]
+Description=Zookeeper
+Before=
+After=network.target
+
+[Service]
+Type=forking
+User=zookeeper
+Group=zookeeper
+WorkingDirectory={{ zookeeper_dir }}
+ExecStart={{ zookeeper_dir }}/bin/zkServer.sh start {{ zookeeper_dir }}/conf/zoo.cfg
+ExecStop={{ zookeeper_dir }}/bin/zkServer.sh stop {{ zookeeper_dir }}/conf/zoo.cfg
+ExecReload={{ zookeeper_dir }}/bin/zkServer.sh restart {{ zookeeper_dir }}/conf/zoo.cfg
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

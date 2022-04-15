@@ -1,0 +1,102 @@
+---
+- name: Creating kafka group
+  group:
+    name: kafka
+    state: present
+    system: yes
+
+- name: Creating kafka user
+  user:
+    name: kafka
+    group: kafka
+    createhome: no
+    system: yes
+    state: present
+
+- set_fact:
+    kafka_name: kafka_{{ kafka.scala_version }}-{{ kafka.version }}
+
+- set_fact:
+    kafka_dir: "{{ kafka.install_dir }}/{{ kafka_name }}"
+
+- name: Kafka | Ensure Kafka tar is downloaded
+  get_url:
+    url: "{{ kafka.mirror }}/kafka/{{ kafka.version }}/{{ kafka_name }}.tgz"
+    dest: /tmp
+  ignore_errors: '{{ ansible_check_mode }}'
+
+- name: Extarct kafka Package
+  unarchive:
+    remote_src: yes
+    src: /tmp/{{ kafka_name }}.tgz
+    dest: "{{ kafka.install_dir }}"
+  ignore_errors: '{{ ansible_check_mode }}'
+
+# Config and start Kafka
+- name: Kafka | Ensures data dir {{ kafka.data_dir }} exists
+  file:
+    path: "{{ kafka.data_dir }}"
+    state: directory
+    owner: kafka
+    group: kafka
+
+- name: Kafka | create symlink to /opt/kafka
+  file:
+    path: "/opt/kafka"
+    state: link
+    src: "{{ kafka.install_dir }}/{{ kafka_name }}"
+  ignore_errors: '{{ ansible_check_mode }}'
+
+- name: Kafka | Ensures log file /opt/kafka/logs exists
+  file:
+    path: "/opt/kafka/logs"
+    state: directory
+    owner: kafka
+    group: kafka
+
+- name: Kafka | Ensures data dir {{ kafka.install_dir }}/{{ kafka_name }} exists
+  file:
+    path: "{{ kafka.install_dir }}/{{ kafka_name }}"
+    recurse: yes
+    state: directory
+    owner: kafka
+    group: kafka
+
+- name: Kafka | Copy kafka-run-class.sh
+  copy:
+    src: kafka-run-class.sh
+    dest: /opt/kafka/bin/kafka-run-class.sh
+    mode: 0755
+  ignore_errors: '{{ ansible_check_mode }}' 
+
+- name: Kafka | Copy kafka server config
+  template:
+    src: kafka-properties.j2
+    dest: "/opt/kafka/config/server.properties"
+  notify: restart kafka
+
+- name: Kafka | systemd start script
+  template:
+    src: kafka-systemd.j2
+    dest: /etc/systemd/system/kafka.service
+    owner: root
+    group: root
+    mode: 644
+  notify: start kafka
+
+- name: Kafka | configure kafka to use service
+  systemd:
+    daemon_reload: yes
+    enabled: yes
+    state: started
+    name: kafka.service
+
+- name: Kafka systems logs cleanup
+  cron:
+    name: clean kafka system logs
+    user: root
+    job: find /opt/kafka/logs -type f -mtime +7 -maxdepth 1 -delete
+    hour: "01"
+    minute: "00"
+    cron_file: kafka_logs
+    state: present
