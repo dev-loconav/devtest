@@ -1,0 +1,7 @@
+---
+- hosts: kafka,zookeeper
+  gather_facts: yes
+  become: true
+  roles:
+    - role: loconav-kafka
+      tags: [kafka,zookeeper]
