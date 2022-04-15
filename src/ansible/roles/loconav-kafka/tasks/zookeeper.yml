@@ -60,7 +60,7 @@
   file:
     path: "{{ zookeeper_dir }}"
     recurse: yes
-    state: directory
+    state: link
     owner: zookeeper
     group: zookeeper
 
