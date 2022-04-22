@@ -49,7 +49,7 @@
     msg: "{{ directpv_status }}"
 
 - name: Install directpv with Enable dynamic discovery
-  shell: bash -ic "kubectl directpv install --enable-dynamic-discovery"
+  shell: bash -ic "kubectl directpv install"
   register: directpv_status
 
 - debug:
