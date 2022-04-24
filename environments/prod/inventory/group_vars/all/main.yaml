@@ -4,7 +4,7 @@
 rke_type: server
 
 # Deploy the control plane in HA mode
-rke2_ha_mode: false
+rke2_ha_mode: true
 
 # Install and configure Keepalived on Server nodes
 # Can be disabled if you are using pre-configured Load Blancer
