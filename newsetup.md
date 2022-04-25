@@ -199,7 +199,22 @@ Follow the section to setup postgres operator and postgres db
 
 ## setup postgres DB cluster
 
-**Default installation will create**
+ **Pre-requisites:**
+  
+Postgres operator installed
+
+filesystem /pgdata is present
+
+all the required details are present in ansible/roles/deploy-postgres/files/postgres-operator/manifests/pgdb.yaml
+
+cluster name, user name, databases
+  
+**Run Job:**
+  
+http://localhost:8080/job/deploy_pgdb/
+ 
+ 
+ **Default installation will create**
  
  1. Namespace: locopgdb
  
