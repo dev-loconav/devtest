@@ -215,7 +215,11 @@ root@loconav1:~#
  ```
  kubectl delete postgresql loco-pgdb -n locopgdb
  ```
- get pvcs associated with above cluster and delete the pvcs
+   wait for all the resources to be cleaned up from namespace
+ ```
+ kubectl get all -n locopgdb
+ ```
+   get pvcs associated with above cluster and delete the pvcs
  
  ```
  root@loconav1:~# kubectl get pvc -n locopgdb
@@ -228,8 +232,8 @@ root@loconav1:~#
 kubectl delete pvc pgdata-loco-pgdb-0 pgdata-loco-pgdb-1 pgdata-loco-pgdb-2 -n locopgdb
  
 ```
-get pvs associated with the above cluster and delete pvs
-example below has pvs being used, you would see pvs in released state
+  get pvs associated with the above cluster and delete pvs
+  example below has pvs being used, you would see pvs in released state
 
  ```
  root@loconav1:~# kubectl get pv | grep pg 
