@@ -115,7 +115,6 @@ provide the "hostname" or "all" for all the hosts in inventory
     label: gpt
 </code></pre>
 
-  
 
 # **Create or extend FS**
   
@@ -197,6 +196,8 @@ Follow the section to setup postgres operator and postgres db
   
   http://localhost:8080/job/deploy_postgres_operator/
 
+ This job will install postgres operator in postgres-operator namespace
+ 
 ## setup postgres DB cluster
 
  **Pre-requisites:**
@@ -286,9 +287,35 @@ http://localhost:8080/job/deploy_pgdb/
  
 ## Postgres maintanance activities
 
+###changing db params
 
+ 1. Refer to src/ansible/roles/deploy-postgres/files/postgres-operator/manifests/complete-postgres-manifest.yaml for most of the parameters 
  
- ## Cleanup postgres DB cluster
+ 2. Update/add required parameters in manifest file of your cluster 
+
+    src/ansible/roles/deploy-postgres/files/postgres-operator/manifests/pgdb.yaml
+ 
+ 3. Run job below
+  
+    http://localhost:8080/job/deploy_pgdb/
+ 
+###view password
+
+  Search for secret name
+ 
+ ```
+root@loconav1:~# kubectl get secrets -n locopgdb | grep credentials.postgresql.acid.zalan.do
+linehaul.loco-pgdb.credentials.postgresql.acid.zalan.do   Opaque                                2      12d
+pooler.loco-pgdb.credentials.postgresql.acid.zalan.do     Opaque                                2      6d7h
+postgres.loco-pgdb.credentials.postgresql.acid.zalan.do   Opaque                                2      12d
+standby.loco-pgdb.credentials.postgresql.acid.zalan.do    Opaque                                2      12d
+root@loconav1:~#
+
+kubectl get secrets -o yaml postgres.loco-pgdb.credentials.postgresql.acid.zalan.do -n locopgdb | grep password | awk '{print $2}' | base64 -d
+ 
+ ```
+
+## Cleanup postgres DB cluster
  
 Get the DB cluster name:
 ```
