@@ -198,10 +198,81 @@ Follow the section to setup postgres operator and postgres db
   http://localhost:8080/job/deploy_postgres_operator/
 
 ## setup postgres DB cluster
+
+Default installation will create 
+
+ Namespace: locopgdb
+ 
+ persistent volumes: 
+ 
+ pg-pv1, pg-pv2, pg-pv3 
+ 
+ based on manifests pv1.yaml, pv2.yaml and pv3.yaml present in 
+ 
+ src/ansible/roles/deploy-postgres/files/postgres-operator/manifests
+ 
+ postgres db cluster and dbs based on manifest pgdb.yaml present in 
+ 
+src/ansible/roles/deploy-postgres/files/postgres-operator/manifests
+
+
+Incase you want to add new cluster
+ 
+1. Create 3 new pv manifests similar to pv1.yaml(change the name of pvs in the yaml)
+
+2. Create new cluster manifest file similar to pgdb.yaml(change the name of cluster)
+
+3. Update manifest file with required dbs, users and parameters
+
+4. update the following tasks in deploy-postgres role present in 
+
+ src/ansible/roles/deploy-postgres/tasks/main.yml
+ Update:
+ 
+ namespace: 
+ 
+ postgres cluster manifest files
+ 
+ pv template file names:
+ 
+ 
+ ```
+ - name: create postgres db ns
+  shell: bash -ic "kubectl create ns locopgdb"
+  tags: pgdb
+  ignore_errors: True
+ 
+ 
+ - name: Create PV
+  shell: bash -ic "kubectl apply -f /tmp/postgres-operator/manifests/{{ item }}"
+  with_items:
+    - 'pv1.yaml'
+    - 'pv2.yaml'
+    - 'pv3.yaml'
+  tags: pgdb
+ 
+ 
+ - name: Deploy Postgres DB
+  shell: bash -ic "kubectl apply -f /tmp/postgres-operator/manifests/pgdb.yaml -n locopgdb"
+  tags: pgdb
+
+
+- name: Wait for postgres db pods to come up
+  shell: bash -ic "kubectl get pods -o json -l application=spilo -L spilo-role -n locopgdb"
+  register: kubectl_get_pods
+  until: kubectl_get_pods.stdout|from_json|json_query('items[*].status.phase')|unique == ["Running"]
+  retries: 100
+  delay: 15
+  tags: pgdb
+ 
+ ```
+ 
  
 ## Postgres maintanance activities
 
-## Cleanup postgres DB cluster
+
+ 
+ ## Cleanup postgres DB cluster
  
 Get the DB cluster name:
 ```
@@ -233,6 +304,7 @@ kubectl delete pvc pgdata-loco-pgdb-0 pgdata-loco-pgdb-1 pgdata-loco-pgdb-2 -n l
  
 ```
   get pvs associated with the above cluster and delete pvs
+ 
   example below has pvs being used, you would see pvs in released state
 
  ```
