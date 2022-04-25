@@ -187,8 +187,24 @@ Required FS are extended if mode is extend
 
 Follow the section to setup postgres operator and postgres db
 
-https://github.com/loconav-tech/local-server-setup#postgres-deployment
+## Setup postgres operator
 
+    
+ **Pre-requisites:**
+  
+ k8s is installed
+
+ **Run Job:**
+  
+  http://localhost:8080/job/deploy_postgres_operator/
+
+ ## setup postgres DB cluster
+ 
+## Postgres maintanance activities
+ 
+ 
+ 
+ 
 # **Setup Redis**
 
 Follow section below to setup redis operator and redis cluster
