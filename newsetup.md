@@ -41,7 +41,7 @@ k8s_master=loconav1
 
   http://localhost:8080/job/Deploy_rke2_cluster/
 
-## Remove worker node
+### Remove worker node
 
   **Run job:**
 
@@ -52,7 +52,7 @@ k8s_master=loconav1
   Provide k8s worker node name as a list
   Example: ['vm23','vm24']
 
-## Remove rke2 installation
+### Remove rke2 installation
 
   **Run job:**
 
