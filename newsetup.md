@@ -31,9 +31,9 @@ k8s_master=loconav1
 
   http://localhost:8080/job/Deploy_rke2_cluster/
 
-**maintainance activities**
+## maintainance activities
 
-## Adding new node to the k8s cluster
+### Adding new node to the k8s cluster
 
   Update the environments/prod/inventory/host.ini to add new vm details in workers section
 
