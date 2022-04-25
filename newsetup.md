@@ -287,7 +287,7 @@ http://localhost:8080/job/deploy_pgdb/
  
 ## Postgres maintanance activities
 
-###changing db params
+### changing db params
 
  1. Refer to src/ansible/roles/deploy-postgres/files/postgres-operator/manifests/complete-postgres-manifest.yaml for most of the parameters 
  
@@ -299,7 +299,7 @@ http://localhost:8080/job/deploy_pgdb/
   
     http://localhost:8080/job/deploy_pgdb/
  
-###view password
+### view password
 
   Search for secret name
  
