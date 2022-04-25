@@ -1,6 +1,8 @@
 
 # **Setup k8s**
 
+## Creating new cluster
+
 Inventory files to be updated:
 environments/prod/inventory/group_vars/all/main.yaml -> this one is generic can be copied as it is
 
@@ -61,11 +63,121 @@ k8s_master=loconav1
 
 # **Setup Filesystems**
 
-Run 2 jobs as per instructions below to create FS
+  This job will create volume groups, which would be used to create LV and eventually filesystems
 
-https://github.com/loconav-tech/local-server-setup#create-or-extend-vg
+**Pre-requisites**
+1. disk attached to VM 
+2. update "vg" section in inventory as below
+   environments/prod/inventory/host_vars/<host>.yaml
+this example has 1 vg which has 3 disk partitions each of 50GB. if you want you can create vg with single parition of 150GB or whatever size you need
+<pre><code>
+vg:
+  - no: 1
+    vgname: vg1
+    disk: /dev/sda
+    size: 50000
+    label: gpt
+  - no: 2
+    vgname: vg1
+    disk: /dev/sda
+    size: 50000
+    label: gpt
+  - no: 3
+    vgname: vg1
+    disk: /dev/sda
+    size: 50000
+    label: gpt
+</code></pre>
 
-https://github.com/loconav-tech/local-server-setup#create-or-extend-vg
+**Run job:**
+
+http://localhost:8080/job/create_extend_vg
+
+**Parameters:** 
+ 
+provide the "hostname" or "all" for all the hosts in inventory
+
+**Expected output:**
+  
+  During first run with above input it will create vg1 with 50GB disk partition and add 2 more 50GB partitions. 
+
+  if you run the job again with same input, it will add 3 new partitions to vg1
+
+  if you want to add only 1 partition, you can only give one partition input in the inventory file.
+  e.g. 
+ <pre><code>
+ vg:
+  - no: 1
+    vgname: vg1
+    disk: /dev/sda
+    size: 50000
+    label: gpt
+</code></pre>
+
+  
+
+# **Create or extend FS**
+  
+This job will create or extend Filesystems
+
+**Pre-requisites**
+  
+1. Voulme group is created 
+2. update "fs" section in inventory as below
+   environments/prod/inventory/host_vars/<host>.yaml
+this example all the logical volume name, fs name and  needed sizes and if its new or it needs extention. 
+<pre><code>
+fs:
+  - mountpoint: "/kafkazkdata"
+    lvname: "kafkazklv"
+    vgname: vg1
+    size: 25
+    mode: new  #new|extend
+  - mountpoint: "/miniopgdata"
+    lvname: "miniopglv"
+    vgname: vg1
+    size: 10
+    mode: new  #new|extend
+  - mountpoint: "/miniopromdata"
+    lvname: "miniopromlv"
+    vgname: vg1
+    size: 10
+    mode: new  #new|extend
+  - mountpoint: "/pgdata"
+    lvname: "pglv"
+    vgname: vg1
+    size: 25
+    mode: new  #new|extend
+  - mountpoint: "/jenkinsdata"
+    lvname: "jenkinslv"
+    vgname: vg1
+    size: 20
+    mode: new  #new|extend  
+  - mountpoint: "/redisdata"
+    lvname: "redislv"
+    vgname: vg1
+    size: 25
+    mode: new  #new|extend
+  - mountpoint: "/nfsdata"
+    lvname: "nfsdatalv"
+    vgname: vg1
+    size: 15
+    mode: new  #new|extend
+</code></pre>
+
+**Run job:**
+  
+http://localhost:8080/job/create_extend_fs
+
+**Parameters:**
+  
+provide the "hostname" or "all" for all the hosts in inventory
+
+**Expected output:**
+  
+Required FS are created if more is extend
+Required FS are extended if mode is extend
+
 
 
 
