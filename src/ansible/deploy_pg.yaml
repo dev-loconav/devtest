@@ -1,7 +1,7 @@
 ---
 
 - name: Deploy Postgres
-  hosts: masters
+  hosts: master
   become: yes
 
   roles:
