@@ -69,8 +69,9 @@ k8s_master=loconav1
 1. disk attached to VM 
 2. update "vg" section in inventory as below
    environments/prod/inventory/host_vars/<host>.yaml
-this example has 1 vg which has 3 disk partitions each of 50GB. if you want you can create vg with single parition of 150GB or whatever size you need
-<pre><code>
+this example has 1 vg which has 3 disk partitions each of 50GB. 
+if you want you can create vg with single parition of 150GB or whatever size you need
+'''
 vg:
   - no: 1
     vgname: vg1
@@ -87,7 +88,7 @@ vg:
     disk: /dev/sda
     size: 50000
     label: gpt
-</code></pre>
+'''
 
 **Run job:**
 
