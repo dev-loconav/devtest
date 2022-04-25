@@ -188,7 +188,6 @@ Required FS are extended if mode is extend
 Follow the section to setup postgres operator and postgres db
 
 ## Setup postgres operator
-
     
  **Pre-requisites:**
   
@@ -198,11 +197,64 @@ Follow the section to setup postgres operator and postgres db
   
   http://localhost:8080/job/deploy_postgres_operator/
 
- ## setup postgres DB cluster
+## setup postgres DB cluster
  
 ## Postgres maintanance activities
+
+## Cleanup postgres DB cluster
  
+Get the DB cluster name:
+```
+ root@loconav1:~# kubectl get postgresql  -n locopgdb
+NAME        TEAM   VERSION   PODS   VOLUME   CPU-REQUEST   MEMORY-REQUEST   AGE   STATUS
+loco-pgdb   loco   14        3      20Gi     100m          100Mi            11d   Running
+root@loconav1:~#
+
+```
+ delete the db cluster you wish to delete
+ ```
+ kubectl delete postgresql loco-pgdb -n locopgdb
+ ```
+ get pvcs associated with above cluster and delete the pvcs
  
+ ```
+ root@loconav1:~# kubectl get pvc -n locopgdb
+NAME                 STATUS   VOLUME   CAPACITY   ACCESS MODES   STORAGECLASS   AGE
+pgdata-loco-pgdb-0   Bound    pg-pv1   20Gi       RWO                           11d
+pgdata-loco-pgdb-1   Bound    pg-pv3   20Gi       RWO                           11d
+pgdata-loco-pgdb-2   Bound    pg-pv2   20Gi       RWO                           11d
+root@loconav1:~#
+
+kubectl delete pvc pgdata-loco-pgdb-0 pgdata-loco-pgdb-1 pgdata-loco-pgdb-2 -n locopgdb
+ 
+```
+get pvs associated with the above cluster and delete pvs
+example below has pvs being used, you would see pvs in released state
+
+ ```
+ root@loconav1:~# kubectl get pv | grep pg 
+pg-pv1                                     20Gi         RWO            Retain           Bound    locopgdb/pgdata-loco-pgdb-0                                                                   11d
+pg-pv2                                     20Gi         RWO            Retain           Bound    locopgdb/pgdata-loco-pgdb-2                                                                   11d
+pg-pv3                                     20Gi         RWO            Retain           Bound    locopgdb/pgdata-loco-pgdb-1                                                                   11d
+root@loconav1:~#
+
+ kubectl delete pv pg-pv1 pg-pv2  pg-pv3 
+ 
+ ```
+ 
+
+## Cleanup entire postgres setup including Operator
+ 
+ First cleanup all the postgres DB clusters using above steps
+ 
+run following steps
+ 
+ ```
+helm delete postgres-operator -n postgres-operator
+helm install postgres-operator-ui -n postgres-operator
+kubectl delete crd operatorconfigurations.acid.zalan.do postgresqls.acid.zalan.do postgresteams.acid.zalan.do
+ 
+ ```
  
  
 # **Setup Redis**
