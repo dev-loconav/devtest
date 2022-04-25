@@ -199,8 +199,8 @@ Follow the section to setup postgres operator and postgres db
 
 ## setup postgres DB cluster
 
-Default installation will create 
-
+**Default installation will create**
+ 
  1. Namespace: locopgdb
  
  2. persistent volumes: 
