@@ -201,19 +201,19 @@ Follow the section to setup postgres operator and postgres db
 
 Default installation will create 
 
- Namespace: locopgdb
+ 1. Namespace: locopgdb
  
- persistent volumes: 
+ 2. persistent volumes: 
  
- pg-pv1, pg-pv2, pg-pv3 
+     pg-pv1, pg-pv2, pg-pv3 
  
- based on manifests pv1.yaml, pv2.yaml and pv3.yaml present in 
+     based on manifests pv1.yaml, pv2.yaml and pv3.yaml present in 
  
- src/ansible/roles/deploy-postgres/files/postgres-operator/manifests
+     src/ansible/roles/deploy-postgres/files/postgres-operator/manifests
  
- postgres db cluster and dbs based on manifest pgdb.yaml present in 
+ 3. postgres db cluster and dbs based on manifest pgdb.yaml present in 
  
-src/ansible/roles/deploy-postgres/files/postgres-operator/manifests
+    src/ansible/roles/deploy-postgres/files/postgres-operator/manifests
 
 
 Incase you want to add new cluster
@@ -226,14 +226,15 @@ Incase you want to add new cluster
 
 4. update the following tasks in deploy-postgres role present in 
 
- src/ansible/roles/deploy-postgres/tasks/main.yml
- Update:
+    src/ansible/roles/deploy-postgres/tasks/main.yml
+     
+    Update:
  
- namespace: 
+  - namespace: 
  
- postgres cluster manifest files
+  - postgres cluster manifest files
  
- pv template file names:
+  - pv template file names:
  
  
  ```
