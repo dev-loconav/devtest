@@ -216,7 +216,7 @@ Default installation will create
     src/ansible/roles/deploy-postgres/files/postgres-operator/manifests
 
 
-Incase you want to add new cluster
+**Incase you want to add new cluster** 
  
 1. Create 3 new pv manifests similar to pv1.yaml(change the name of pvs in the yaml)
 
