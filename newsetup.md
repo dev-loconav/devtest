@@ -415,9 +415,72 @@ https://github.com/loconav-tech/local-server-setup#redis-deployment
 
 # **Setup Kafka**
 
-Follow section below to setup kafka operator, create kafka cluster and topics
+Kafka is deployed on the VMs. 
 
-https://github.com/loconav-tech/local-server-setup#kafka-deployment
+**Pre-requisites:** 
+ 
+  3 VMs with 
+    1. Filesystem for kafka and zookeeper logs
+    2. java-1.8.0-openjdk
+    3. inventory to be updated with the hostnames same as, aliases/service names used to connect by application(endpoints yaml)
+    3. /etc/hosts file to be updated with all the hostsname same as names in inventory 
+
+ Role: src/ansible/roles/loconav-kafka
+ 
+ Update the defaults file with appropriate details
+ 
+    src/ansible/roles/loconav-kafka/defaults/main.yml
+ 
+ e.g. version, data dir, log dir
+ 
+ Run Job:
+ 
+ http://localhost:8080/job/deploy-kafka-vm/
+
+
+ ### Setup end points
+ 
+  1. Create service yaml file for each kafka node e.g. below kafka-1-lc.yaml in 
+ 
+      src/ansible/roles/deploy_app/files/external_service
+
+     ```
+
+      ---
+      kind: Service
+      apiVersion: v1
+      metadata:
+       name: telematics-kafka-1-lc
+       namespace: loconav
+      spec:
+       type: ClusterIP
+       ports:
+       - port: 9092
+         targetPort: 9092
+
+      ---
+
+      kind: Endpoints
+      apiVersion: v1
+      metadata:
+       name: telematics-kafka-1-lc
+       namespace: loconav
+      subsets:
+       - addresses:
+           - ip: 192.168.30.3
+         ports:
+           - port: 9092
+
+      ```
+
+      This will create a external service in loconav namespace, pointing to node 1 kafka 
+
+      similarly create yaml for rest of the nodes
+ 
+      Run job below:
+    
+      http://localhost:8080/job/Deploy_endpoints/
+ 
 
 # **Setup end points**
 
