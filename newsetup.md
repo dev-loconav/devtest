@@ -284,6 +284,37 @@ http://localhost:8080/job/deploy_pgdb/
  
  ```
  
+ ### Create endpoints as per the requirements
+ 
+ 1. Create service yaml file for respective db e.g. below linehaul-db.yaml in 
+ 
+      src/ansible/roles/deploy_app/files/external_service
+
+     ```
+
+      kind: Service
+     apiVersion: v1
+     metadata:
+       name: linehaul-db-lc
+       namespace: loconav
+     spec:
+       type: ExternalName
+       externalName: loco-pgdb.locopgdb.svc.cluster.local
+       ports:
+       - name: pgserver
+         port: 5432
+
+      ```
+
+      This will create a external service in loconav namespace, pointing to postgres db cluster service.
+
+      you can use this same service to access all the dbs, as all the dbs are deployed on same cluster.
+
+      in default installation, we have created different services(*db.yaml) just for the ease of operations. however, all the services point to same postgres cluster db.
+ 
+ 2. Run job
+    
+    http://localhost:8080/job/Deploy_endpoints/
  
 ## Postgres maintanance activities
 
