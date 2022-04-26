@@ -413,9 +413,9 @@ Follow section below to setup redis operator and redis cluster
 
 https://github.com/loconav-tech/local-server-setup#redis-deployment
 
-# ** Setup Kafka and schema registration **
+#**Setup Kafka and schema registration**
 
-## kafka
+ ## kafka
 
 Kafka is deployed on the VMs. 
 
