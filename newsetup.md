@@ -463,8 +463,8 @@ loconav2 ansible_host=192.168.30.3 ansible_ssh_common_args='-o StrictHostKeyChec
  
 ## Setup end points
  
-** kafka end points ** 
- 
+**kafka end points**
+
   1. Create service yaml file for each kafka node e.g. below kafka-1-lc.yaml in 
  
       src/ansible/roles/deploy_app/files/external_service
@@ -506,7 +506,7 @@ loconav2 ansible_host=192.168.30.3 ansible_ssh_common_args='-o StrictHostKeyChec
     
       http://localhost:8080/job/Deploy_endpoints/
  
- ** schema registration end points**
+**schema registration end points** 
  
   1. Create service yaml file for schema registry node e.g. below schema-registry.yaml in 
  
