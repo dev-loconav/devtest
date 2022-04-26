@@ -1,10 +1,10 @@
 pipeline {
     agent any
 parameters {
-  string(name: 'env', defaultValue: 'nepal', description: 'environment')
+  string(name: 'environ', defaultValue: 'nepal', description: 'environment')
  }
     environment {
-    inv = "environments/${env}/inventory/host.ini"
+    inv = "environments/${environ}/inventory/host.ini"
     }
     stages {
         stage('Create K8S Cluster') {
