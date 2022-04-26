@@ -22,7 +22,7 @@
 
 - name: Prepare kubeconfig
   shell: cp -rf /etc/rancher/rke2/rke2.yaml /root/.kube/config
-  when: inventory_hostname == groups[rke2_servers_group_name].0
+  #when: inventory_hostname == groups[rke2_servers_group_name].0
 
 - block:
     - name: Prepare summary
