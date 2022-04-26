@@ -512,7 +512,7 @@ loconav2 ansible_host=192.168.30.3 ansible_ssh_common_args='-o StrictHostKeyChec
  
       src/ansible/roles/deploy_app/files/external_service
  
- 
+ ```
       ---
       kind: Service
       apiVersion: v1
@@ -536,7 +536,7 @@ loconav2 ansible_host=192.168.30.3 ansible_ssh_common_args='-o StrictHostKeyChec
            - ip: 192.168.30.3
          ports:
            - port: 8081
- 
+ ```
  
  Run job below:
     
