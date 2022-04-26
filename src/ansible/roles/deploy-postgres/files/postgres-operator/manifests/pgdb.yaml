@@ -7,7 +7,7 @@ metadata:
   namespace: locopgdb
 spec:
   allowedSourceRanges: null
-  numberOfInstances: 3
+  numberOfInstances: 2
   users:
     linehaul:  # database owner
     - superuser
