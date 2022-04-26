@@ -30,3 +30,5 @@
 
 - name: Final steps
   include_tasks: summary.yml
+  when:
+    - inventory_hostname in groups[rke2_servers_group_name]
