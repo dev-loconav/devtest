@@ -284,6 +284,32 @@ http://localhost:8080/job/deploy_pgdb/
  
  ```
  
+ ### Manual activity:
+
+**Setting postgres db password**
+
+Copy the output of command below
+```
+kubectl get secrets -o yaml postgres.loco-pgdb.credentials.postgresql.acid.zalan.do -n locopgdb | grep password | awk '{print $2}' | base64 -d
+```
+connect to postgres pod
+```
+kubectl exec --stdin --tty loco-pgdb-0  -n locopgdb -- /bin/bash
+```
+connet to default db
+```
+psql -U postgres
+```
+Run below and paste the password copied above
+```
+\password
+enter new password
+```
+delete the postgres operator pod, it will restart automatically
+```
+kubectl delete po postgres-operator-6dd8984889-6gx5z -n postgres-operator
+```
+ 
  ### Create endpoints as per the requirements
  
  1. Create service yaml file for respective db e.g. below linehaul-db.yaml in 
@@ -409,13 +435,58 @@ kubectl delete crd operatorconfigurations.acid.zalan.do postgresqls.acid.zalan.d
  
 # **Setup Redis**
 
-Follow section below to setup redis operator and redis cluster
+## Redis operator installation
+  
+**Pre-requisites:**
+  
+k8s is installed
 
-https://github.com/loconav-tech/local-server-setup#redis-deployment
+**Run Job:**
+  
+http://localhost:8080/job/deploy_redis_operator/
+ 
+ 
+## Redis clusters installation
+
+**Pre-requisites:**
+
+Redis operator installed
+filesystem /redisdata is present
+required redis clusters are present in ansible/roles/deploy-redis/tasks/main.yml
+
+**Run Job:**
+  
+http://localhost:8080/job/deploy_redis_clusters/
+ 
+
+## setup redis endpoint
+
+  1. Create service yaml file for each redis cluster e.g. below linehaul-redis.yaml in 
+ 
+      src/ansible/roles/deploy_app/files/external_service
+ ```
+ kind: Service
+apiVersion: v1
+metadata:
+  name: linehaul-redis-lc
+  namespace: loconav
+spec:
+  type: ExternalName
+  externalName: linehaul-redis.redis.svc.cluster.local
+  ports:
+  - name: redis-client
+    port: 6379
+ ```
+ 
+ similarly create service yaml for all the remaining redis clusters.
+ 
+ 2.  Run job below:
+    
+      http://localhost:8080/job/Deploy_endpoints/
 
 #**Setup Kafka and schema registration**
 
- ## kafka
+## kafka
 
 Kafka is deployed on the VMs. 
 
@@ -547,7 +618,119 @@ loconav2 ansible_host=192.168.30.3 ansible_ssh_common_args='-o StrictHostKeyChec
 
 # **Setup Minio**
 
-follow section below to setup minio partitions, deploy minio operator and format minio partions
+## Create minio disks
+  
+This job will create disk partitions needed for minio volumes
 
-https://github.com/loconav-tech/local-server-setup#minio-deployment
+**Pre-requisites**
+  
+1. disk attached to VM
+2. update "miniodisks" section in inventory as below
+   environments/prod/inventory/host_vars/<host>.yaml
+this example 2 partitions of 10GB each 
+```
+miniodisks:
+  - part: 1
+    disk: /dev/sda
+    size: 10000
+    label: gpt
+  - part: 2
+    disk: /dev/sda
+    size: 10000
+    label: gpt
+```
 
+**Run job:**
+
+http://localhost:8080/job/create_minio_disks/
+
+**Parameters:**
+provide the "hostname" or "all" for all the hosts in inventory
+
+**Expected output:**
+
+2 new partitions would be created everytime job is run with above input
+if only one partition is given, only one new partition will be created
+
+
+
+## Deploy minio
+
+  
+**Run job:**
+  
+http://localhost:8080/job/deploy_minio/
+
+
+
+
+## Format minio disks
+
+This job formats disk partitions needed for minio persistence volumes
+
+**Pre-requisites**
+
+1. minio is deployed
+2. minio disks are created using above job
+
+
+**Run job:**
+
+http://localhost:8080/job/format_minio_disks/
+
+**Parameters:**
+
+none
+
+**Epected output:**
+
+disks would be formated and ready for use in order to create new tenant
+
+
+## Create Minio tenant:
+
+To access minio UI 
+run "kubectl minio proxy -n minio-operator"
+it will expose the minio port and display Current JWT to login, use ssh tunnelling to open it on your desktop
+
+you can access existing tenant and explore it. 
+you can create new tenant 
+you can delete any tenant
+
+To create new tenant below are the pre-requisites, 
+1. create a namespace by name of the tenant
+2. create 2 pvs one for postgres db used for logging and prometheus for metrics
+below is the example of test tenant pv for pg
+<pre><code>
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: logdb-test-pv
+  labels:
+    type: local
+spec:
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/miniopgdata"
+</code></pre>
+below is the example of test tenant pv for prometheus
+<pre><code>
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: prom-test-pv
+  labels:
+    type: local
+spec:
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/miniopromdata"
+</code></pre>
+3. use the UI to create tenant
+4. fill in all the data, use "directpv-min-io" as storage class
