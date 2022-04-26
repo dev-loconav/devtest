@@ -8,7 +8,7 @@ rke2_ha_mode: true
 
 # Install and configure Keepalived on Server nodes
 # Can be disabled if you are using pre-configured Load Blancer
-rke2_ha_mode_keepalived: false
+rke2_ha_mode_keepalived: true
 
 # Kubernetes API and RKE2 registration IP address. The default Address is the IPv4 of the Server/Master node.
 # In HA mode choose a static IP which will be set as VIP in keepalived.
