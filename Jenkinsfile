@@ -2,9 +2,10 @@ pipeline {
     agent any
 parameters {
   string(name: 'env', defaultValue: 'nepal', description: 'environment')
-
-
  }
+    environment {
+    inv = "environments/${env}/inventory/host.ini"
+    }
     stages {
         stage('Create K8S Cluster') {
             steps {
@@ -13,7 +14,7 @@ parameters {
                 ansiColor('xterm') {
                     ansiblePlaybook( 
                         playbook: 'src/ansible/create_rke.yaml',
-                        inventory: 'environments/"${params.env}"/inventory/host.ini', 
+                        inventory: '${inv}', 
                         colorized: true) 
                 }
             }
