@@ -413,7 +413,9 @@ Follow section below to setup redis operator and redis cluster
 
 https://github.com/loconav-tech/local-server-setup#redis-deployment
 
-# **Setup Kafka**
+# ** Setup Kafka and schema registration **
+
+## kafka
 
 Kafka is deployed on the VMs. 
 
@@ -437,8 +439,31 @@ Kafka is deployed on the VMs.
  
  http://localhost:8080/job/deploy-kafka-vm/
 
+## Schema registration
 
- ### Setup end points
+ Schema registration is deployed on VM
+ 
+ Role being used 
+ 
+ src/ansible/roles/loconav-schema-registry
+ 
+ 
+1. Update the inventory with hostname on which schema registration needs to be setup
+
+```
+ [schema_registry]
+loconav2 ansible_host=192.168.30.3 ansible_ssh_common_args='-o StrictHostKeyChecking=no'
+ 
+ ```
+ 
+ 2. Run the Job 
+ 
+ http://localhost:8080/job/deploy-schema-registry/
+ 
+ 
+## Setup end points
+ 
+** kafka end points ** 
  
   1. Create service yaml file for each kafka node e.g. below kafka-1-lc.yaml in 
  
@@ -481,52 +506,45 @@ Kafka is deployed on the VMs.
     
       http://localhost:8080/job/Deploy_endpoints/
  
+ ** schema registration end points**
+ 
+  1. Create service yaml file for schema registry node e.g. below schema-registry.yaml in 
+ 
+      src/ansible/roles/deploy_app/files/external_service
+ 
+    ```
+      ---
+      kind: Service
+      apiVersion: v1
+      metadata:
+       name: schema-registry-lc
+       namespace: loconav
+      spec:
+       type: ClusterIP
+       ports:
+       - port: 8081
+         targetPort: 8081
 
-# **Setup end points**
+      ---
 
-Follow section below to setup end points for above services
+      kind: Endpoints
+      apiVersion: v1
+      metadata:
+       name: schema-registry-lc
+      subsets:
+       - addresses:
+           - ip: 192.168.30.3
+         ports:
+           - port: 8081
+ 
+ ```
+ 
+       Run job below:
+    
+      http://localhost:8080/job/Deploy_endpoints/
 
-https://github.com/loconav-tech/local-server-setup/blob/master/README.md#create-aliases-for-postgres-kafka-redis-schema-registry
 
-# **Deploy telematics**
 
-**Pre-requisites**
-
-All the helm charts are present at location below
-
-https://github.com/loconav-tech/local-server-setup/tree/master/helm-charts
-
-every helm chart has values configured for on-prem/oman region
-
-**Deployment**
-
-Run the job below with appropriate parameters line
-
-provider - onprem
-
-region - oman
-
-http://localhost:8080/job/deploy_telematics
-
-# **Deploy linehaul**
-
-**Pre-requisites**
-
-All the helm charts are present at location below
-
-https://github.com/loconav-tech/local-server-setup/tree/master/helm-charts
-
-every helm chart has values configured for on-prem/oman region
-
-**Deployment**
-
-Run the job below with appropriate parameters line
-
-provider - onprem
-
-region - oman
-
-http://localhost:8080/job/deploy_linehaul/
 
 # **Setup Minio**
 
