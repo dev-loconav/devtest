@@ -1,0 +1,31 @@
+- name: Create redis  pv files 
+  template:  
+    src: pv.yaml
+    dest: "/tmp/pv_{{ item }}.yaml"
+  tags: rediscl
+
+- name: Create redis PV
+  shell: bash -ic "kubectl apply -f /tmp/pv_{{ item }}.yaml"
+  tags: rediscl
+
+- name: Deploy redis
+  shell: bash -ic "helm upgrade {{ item }} /tmp/redis-data/charts/redis-0.9.0.tgz --install -f /tmp/redis-data/charts/values_sa.yaml -n  redis"
+  tags: rediscl
+  
+ 
+- name: Wait for pods to come up
+  shell: bash -ic "kubectl get pods -n redis | grep {{ item }} | grep '2/2' | wc -l" 
+  register: kubectl_get_pods_ready_count
+  until: kubectl_get_pods_ready_count.stdout == "1"
+  retries: 40
+  delay: 15
+  tags: rediscl
+  
+- name: Validation for {{ item }}
+  shell: bash -ic "redis-cli -u redis://$(/var/lib/rancher/rke2/bin/kubectl get endpoints -n redis | grep {{ item }}-headless | awk -F ' ' '{print $2}') -c ping"
+  register: validation_status
+  tags: rediscl
+  
+- debug:
+    msg: "{{ validation_status.stdout }}"
+  tags: rediscl
