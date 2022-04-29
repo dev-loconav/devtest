@@ -4,29 +4,7 @@
   copy:
     src: redis-data
     dest: /tmp
-
-
-- name: Create redis  pv files 
-  template:  
-    src: pv.yaml
-    dest: "/tmp/pv_{{ item }}.yaml"
-  with_items:
-    - '1'
-    - '2'
-    - '3'
-    - '4'
-    - '5'
-    - '6'
-    
-- name: Create redis PV
-  shell: bash -ic "kubectl apply -f /tmp/pv_{{ item }}.yaml"
-  with_items:
-    - '1'
-    - '2'
-    - '3'
-    - '4'
-    - '5'
-    - '6'
+  tags: [ rediscl, redisop ]
 
 - name: Create namespace
   shell: bash -ic "kubectl create ns {{ item }}"
@@ -34,32 +12,31 @@
   with_items:
     - 'redis'
     - 'redis-operator'
+  tags: [ rediscl, redisop ]
 
   
 - name: Deploy redis operator
   shell: bash -ic "helm upgrade redis-operator /tmp/redis-data/charts/redis-operator-0.10.1.tgz --install -n redis-operator"
+  tags: redisop
   
 - name: test redis operator
   shell: bash -ic "helm test redis-operator --namespace redis-operator"
+  tags: redisop
   
-- name: Deploy redis
-  shell: bash -ic "helm upgrade redis /tmp/redis-data/charts/redis-cluster.0.9.0.tar.gz --install -n redis"
-
-- name: Wait for pods to come up
-  shell: bash -ic "kubectl get pods -n redis | grep '2/2' | wc -l" 
-  register: kubectl_get_pods_ready_count
-  until: kubectl_get_pods_ready_count.stdout == "6"
-  retries: 40
-  delay: 15
-
 - name: Install redis-cli
   apt:
     name: redis-tools
     state: present
+  tags: rediscl
 
-- name: Validation
-  shell: bash -ic "redis-cli -u redis://$(/var/lib/rancher/rke2/bin/kubectl get endpoints -n redis | grep redis-leader-headless | awk -F ' ' '{print $2}') -c ping"
-  register: validation_status
-
-- debug:
-    msg: "{{ validation_status.stdout }}"
+- name: Create redis clusters
+  include_tasks: redis-cluster.yaml
+  tags: rediscl
+  with_items :
+    - 'cache-builder-redis'
+    - 'anycable-redis'
+    - 'linehaul-redis'
+    - 'sidekiq-redis'
+    - 'current-state-redis'
+    - 'mocker-redis'
+    - 'summarizer-redis'
