@@ -13,14 +13,14 @@
 - name: Install packages
   package:
     name: containerd 
-  when: inventory_hostname == groups[rke2_servers_group_name].0
+  when: inventory_hostname in groups[rke2_servers_group_name]
   
 - name: Download helm
   unarchive:
     src: "https://get.helm.sh/helm-v3.8.0-linux-amd64.tar.gz"
     dest: /tmp
     remote_src: True
-  when: inventory_hostname == groups[rke2_servers_group_name].0
+  when: inventory_hostname in groups[rke2_servers_group_name]
 
 - name: Configure helm
   copy:
@@ -30,13 +30,13 @@
     group: root
     mode: 0777
     remote_src: True
-  when: inventory_hostname == groups[rke2_servers_group_name].0
+  when: inventory_hostname in groups[rke2_servers_group_name]
 
 - name: Add RKE2 to PATH
   copy:
     content: "export PATH=$PATH:/var/lib/rancher/rke2/bin"
     dest: "/etc/profile.d/add_path.sh"
-  when: inventory_hostname == groups[rke2_servers_group_name].0
+  when: inventory_hostname in groups[rke2_servers_group_name]
   
 - name: Adding the path in the bashrc files
   lineinfile:
