@@ -1,5 +1,7 @@
 /var/lib/rancher/rke2/bin/crictl --runtime-endpoint unix:///run/k3s/containerd/containerd.sock rmi --prune
 
+https://ot-container-kit.github.io/helm-charts/
+
 #done
 Job1: creating partitions for minio disks
 Create lvm partitions for miniopartitions
