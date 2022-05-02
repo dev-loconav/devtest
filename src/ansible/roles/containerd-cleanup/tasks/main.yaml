@@ -1,0 +1,5 @@
+---
+
+- name: Cleanup unused images
+  shell: bash -ic "/var/lib/rancher/rke2/bin/crictl --runtime-endpoint unix:///run/k3s/containerd/containerd.sock rmi --prune"
+ 
